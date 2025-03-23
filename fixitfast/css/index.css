@@ -1,0 +1,25 @@
+.row{
+    display: inline-block;
+}
+
+.placeAdButton{
+    background-color: #F0EFEF;
+    border-radius: 5px;
+    border-color: #67AB9F;
+    padding: 5px;
+    border-width: 3px;
+    
+}
+
+body{
+    background-color: #F0EFEF;
+}
+
+.homeButton{
+    padding-top: 5px;
+}
+
+.heading_Home{
+    text-align: center;
+}
+
