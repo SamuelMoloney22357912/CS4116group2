@@ -6,6 +6,32 @@ include("functions.php");
 $user_data = check_login($con);
 
 $status = isset($_GET['status']) ? $_GET['status'] : '';
+
+
+if($_SERVER['REQUEST_METHOD'] == "POST"){
+    $fName = $_POST['first_name'];
+    $lName = $_POST['last_name'];
+    $county = $_POST['county'];
+    $password = $_POST['password'];
+
+    if(!empty($fName) && !empty($lName)){
+
+        try{
+            $query = "UPDATE users SET first_name='$fName', last_name='$lName', county='$county'  WHERE user_id='{$user_data['user_id']}'";
+            mysqli_query($con, $query);
+
+            $Update = "Updated";
+        }catch(mysqli_sql_exception $e){
+            die("Database insert error: " . $e->getMessage());
+    }
+
+    }else{
+        echo("Plese fill out all info");
+
+    }
+
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -43,7 +69,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
                     <a href="edit_picture.php">Edit Profile Picture</a>
                 </div>
 
-                <form method="post" action="save_profile.php">
+                <form method="post">
                     <div class="input-group">
                         <label for="first_name">Edit First Name:</label>
                         <input type="text" id="first_name" name="first_name" value="<?php echo $user_data['first_name']; ?>">
@@ -68,6 +94,8 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
                         <input type="submit" value="Save Changes">
                     </div>
                 </form>
+
+                    <p><?php echo($Update); ?></p>
             </div>
         </div>
     </div>
