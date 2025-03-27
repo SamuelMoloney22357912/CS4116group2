@@ -3,45 +3,36 @@ session_start();
 include("connection.php");
 include("functions.php");
 
-//$text = "Hi";
 
 if($_SERVER['REQUEST_METHOD'] == "POST"){
-    $uName = $_POST['uName'];
+    $uName = trim($_POST['uName']);
     $password = $_POST['password'];
-    //$fName =$_POST['fName'];
-    //$lName = $_POST['lName'];
-    //$county = $_POST['county'];
 
     if(!is_numeric($uName) && !empty($uName)){
-        //save to database
-        //$user_id = random_num(20);
+        $query = "SELECT * FROM Users WHERE user_name = ? LIMIT 1";
         
+        if ($stmt = $con->prepare($query)) {
+            $stmt->bind_param("s", $uName);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-        $query = "select * from Users where user_name = '$uName' limit 1";
-        $result = mysqli_query($con, $query);
+            if($result->num_rows > 0){ 
+                $user_data = $result->fetch_assoc();
 
-        if($result){
-            echo("result");
-            if($result && mysqli_num_rows($result) > 0){ 
-                $user_data = mysqli_fetch_assoc($result);
-                if($user_data['password']=== $password){
-
+                if(password_verify($password, $user_data['password'])){
                     $_SESSION['user_id'] = $user_data['user_id'];
-
                     header("Location: index.php");
-                    die();
-
+                    exit();
                 }
             }
-            $incorectInfo = "Incorect username or password";
-        }
 
-        
-    }else{
-        $emptyFields = "Plesse enter a valid name and password";
-        //echo "Plesse enter a valid name and password";
+            $incorectInfo = "Incorrect username or password";
+        }
+    } else {
+        $emptyFields = "Please enter a valid username and password";
     }
 }
+
 ?>
 
 <!DOCTYPE html>
