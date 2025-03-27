@@ -1,14 +1,20 @@
 <?php
 
-
-
 $dbhost = "localhost";
 $dbuser = "root";
 $dbpass = "";
-$dbname = "fixitfast";
+$dbname = "fixitfast_db";
 
-if(!$con = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname)){
+try {
    
-    die("Failed to connect to the database");
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+    
+    
+    $con = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 
+    
+
+} catch (mysqli_sql_exception $e) {
+    
+    die("Database connection failed: " . $e->getMessage());
 }

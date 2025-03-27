@@ -76,6 +76,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         ?>
     </p>
 
+    <a href="SignUp.php">
+         <button class = "signup_button" type = "button">SignUp</button>
+    </a>
+
+    <a href="businessSignup.php">
+            <button class = "Bis_signup_button" type = "button">Become a seller</button>
+    </a>
+
     
 
 </div>
