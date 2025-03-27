@@ -1,25 +1,144 @@
-.row{
-    display: inline-block;
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #F0EFEF;
+    text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
-.placeAdButton{
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
     background-color: #F0EFEF;
-    border-radius: 5px;
-    border-color: #67AB9F;
-    padding: 5px;
-    border-width: 3px;
+    padding: 15px 20px;
+    border-bottom: 2px solid #000;
+    box-shadow: none;
+    max-width: 1200px;
+}
+
+.pageOpt button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 20px;
+    position: relative;
+}
+
+.pageOpt button a {
+    text-decoration: none;
+    color: black;
+}
+
+.pageOpt button:hover a {
+    text-decoration: underline;
+}
+
+.pageOpt button:first-child a {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.logo img {
+    width: 100%;
+    max-width: 200px;
+    border-color: #F0EFEF;
     
 }
 
-body{
-    background-color: #F0EFEF;
+.rightBtn {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
-.homeButton{
-    padding-top: 5px;
+.rightBtn a img {
+    width: 50px; /* Increased icon size */
+    margin-left: auto;
 }
 
-.heading_Home{
-    text-align: center;
+.placeAdBtn {
+    background-color: transparent;
+    border: 2px solid #008080;
+    padding: 5px 10px; /* Reduced button size */
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: auto; /* Pushes the button further right */
+    transition: background-color 0.3s ease;
 }
 
+.placeAdBtn:hover{
+    background-color: #008080;
+}
+
+.placeAdBtn a {
+    text-decoration: none;
+    color: black;
+}
+
+/* Featured Ads Section */
+.feturedAds {
+    margin-top: 120px;
+}
+
+.Heading {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.ads {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+.ad1, .ad2, .ad3 {
+    flex: 1;
+    width: 100%;
+    max-width: 300px;
+}
+
+.ads img {
+    width: 100%;
+    border-radius: 10px;
+    
+}
+
+/* See More Button */
+.moreBtn {
+    margin-top: 20px;
+}
+
+.seeMoreBtn {
+    background: transparent;
+    border: 2px solid #008080;
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+.seeMoreBtn:hover {
+    background-color: #008080;
+    color: white;
+}
+
+.seeMoreBtn a {
+    text-decoration: none;
+    color: black;
+}
