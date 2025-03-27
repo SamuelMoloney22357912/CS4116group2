@@ -1,0 +1,66 @@
+body {
+    
+    background-image: url('../images/istockphoto-973812618-1024x1024.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+
+  .container{
+    background : #ededf3;
+    width : 450px;
+    padding : 10rem;
+    margin : 50px auto;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 15%;
+    box-shadow: 10px 10px 10px black;
+    border-style: solid;
+    border-color: rgb(85, 189, 135) ;
+    border-width: 5px;
+    
+    
+}
+
+.fields{
+ 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.signupBtn{
+    float: right;
+    margin-right: -100%;
+    
+    
+
+}
+
+input{
+    padding: 2%;
+    border-color: rgb(85, 189, 135) ;
+    border-radius: 5px;
+    border-width: 3px;
+    background-color: #ededf3;
+}
+
+.dropdown{
+    border-color:rgb(85, 189, 135) ;
+    border-radius: 5px;
+    border-width: 3px;
+    background-color: #ededf3;
+}
+
+.navBtn{
+    float: left;
+    margin-left: 10%;
+    margin-top: -10%;
+    
+}
+a{
+    color: black;
+}
+
+table{
+    border-spacing: 20px;
+}
