@@ -29,14 +29,20 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                 $userEx = "Username is taken";
                 echo($userEx);
             }else{
+
                 echo("inside if");
                 try{
-                    $query = "insert into Users (first_name,last_name,user_name,password,county) values('$fName','$lName','$uName','$password','$county')";
-                    mysqli_query($con, $query);
+                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-                    
-
-                }catch(mysqli_sql_exception $e){
+                    $query = "INSERT INTO Users (first_name, last_name, user_name, password, county) 
+                              VALUES ('$fName', '$lName', '$uName', '$hashedPassword', '$county')";
+                    if (mysqli_query($con, $query)) {
+                        header("Location: Login.php");
+                        exit();
+                    } else {
+                        echo "Error: " . mysqli_error($con); // 🔹 Show error if query fails
+                    }
+                } catch (mysqli_sql_exception $e) {
                     die("Database insert error: " . $e->getMessage());
                 }
                 header("Location: Login.php");
