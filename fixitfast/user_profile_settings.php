@@ -7,6 +7,7 @@ $user_data = check_login($con);
 
 $updateMessage = "";
 
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $fName = trim($_POST['first_name']);
     $lName = trim($_POST['last_name']);
@@ -21,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $stmt->execute();
             $stmt->close();
 
+            // Handle password update
             if (!empty($password)) {
                 if ($password === $confirm_password) {
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -29,12 +31,28 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     $stmt->bind_param("si", $hashedPassword, $user_data['user_id']);
                     $stmt->execute();
                     $stmt->close();
-
                 } else {
                     $updateMessage = "Passwords do not match.";
                 }
             }
 
+            // Handle profile picture upload
+            if (!empty($_FILES['profile_picture']['name'])) {
+                $imageName = basename($_FILES['profile_picture']['name']);
+                $imagePath = "images/" . $imageName;
+
+                // Move uploaded file
+                if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $imagePath)) {
+                    $stmt = $con->prepare("UPDATE users SET profile_picture=? WHERE user_id=?");
+                    $stmt->bind_param("si", $imageName, $user_data['user_id']);
+                    $stmt->execute();
+                    $stmt->close();
+                } else {
+                    $updateMessage = "Error uploading profile picture.";
+                }
+            }
+
+            // Refresh user data
             $stmt = $con->prepare("SELECT * FROM users WHERE user_id=?");
             $stmt->bind_param("i", $user_data['user_id']);
             $stmt->execute();
@@ -90,10 +108,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             <div class="profile-edit">
                 <div class="profile-image">
                     <img src="images/<?php echo htmlspecialchars($user_data['profile_picture']); ?>" alt="Profile Picture">
-                    <a href="edit_picture.php">Edit Profile Picture</a>
                 </div>
 
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="input-group">
+                        <label for="profile_picture">Upload New Profile Picture:</label>
+                        <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+                    </div>
+
                     <div class="input-group">
                         <label for="first_name">Edit First Name:</label>
                         <input type="text" id="first_name" name="first_name" value="<?php echo htmlspecialchars($user_data['first_name']); ?>">
@@ -118,7 +140,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             ];
 
                             foreach ($counties as $countyOption) {
-                                // Check if the county is the one the user has currently selected
                                 $selected = ($countyOption == $user_data['county']) ? 'selected' : '';
                                 echo "<option value='$countyOption' $selected>$countyOption</option>";
                             }
