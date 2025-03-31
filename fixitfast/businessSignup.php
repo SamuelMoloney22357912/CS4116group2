@@ -16,14 +16,47 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     $password = $_POST['password'];
     $cPassword = $_POST['cPassword'];
     $oId = 1;
+    $business = 1;
+    //for test purposes.
+    $lName = "";
 
     $checkUserMatchQuery = "SELECT * FROM businesses WHERE user_name = '$busUName' LIMIT 1";
+    $checkUserMatch = "SELECT * FROM users WHERE user_name = '$busUName' LIMIT 1";
+
 
     if($password != $cPassword){
         $matchErr = "The passwords do not match";
         echo($matchErr);
     }else{
         if(!empty($bName) && !empty($oName) && !empty($phoneN) && !empty($dess) && !empty($busUName) && !empty($password)){
+            $result2 = mysqli_query($con, $checkUserMatch);
+            if(mysqli_num_rows($result2) > 0){
+                $userEx = "Username is taken";
+            }else{
+                try{
+                    $userQuery = "insert into Users (first_name,last_name,user_name,password,county,business) values('$oName','$lName','$busUName','$password','$county','$business')";
+                    mysqli_query($con, $userQuery);
+                }catch(mysqli_sql_exception $x){
+                    die("Database insert error for user table: " . $x->getMessage());
+                }
+            }
+            try{
+
+                $ownerIdQuery = "SELECT user_id FROM users ORDER BY user_id DESC LIMIT 1";
+                $ownerIdResult = mysqli_query($con, $ownerIdQuery);
+                $ownerRow = mysqli_fetch_assoc($ownerIdResult);
+                $ownerId = $ownerRow['user_id'];
+            sleep(1);
+
+            }catch(mysqli_sql_exception $z){
+                die("Error selecting user Id: " . $z->getMessage());
+
+            }
+
+
+
+
+            
             //save to database
             $result = mysqli_query($con, $checkUserMatchQuery);
             if(mysqli_num_rows($result) > 0){
@@ -32,13 +65,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             }else{
                 echo("inside if");
                 try{
-                    $query = "insert into businesses (owner_id,owner_name,business_name,county,category,description,phone_no,user_name,password) values('$oId','$oName','$bName','$county','$category','$dess','$phoneN','$busUName','$password')";
+                    $query = "insert into businesses (owner_id,owner_name,business_name,county,category,description,phone_no,user_name,password) values('$ownerId','$oName','$bName','$county','$category','$dess','$phoneN','$busUName','$password')";
                     mysqli_query($con, $query);
+                    echo("Sucseful");
                 }catch(mysqli_sql_exception $e){
                     die("Database insert error: " . $e->getMessage());
             }
             
-    
+            sleep(1);
             header("Location: Login.php");
             die();
             }
@@ -63,15 +97,18 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/businessSignup.css">
     <title>Business SignUp</title>
 </head>
 <body>
+
+<div class = container>
     <H1>Business SignUp</H1>
 
 
     <form action="" method = "post">
 
-    <table>
+    <table class = "fields">
         <tr>
             <td>
                 <label for="bName"> Business Name:</label><br>
@@ -93,7 +130,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                 
             <td>
                 <label for="county">County:</label><br>
-                <select id="county" name="county" required>
+                <select class = "dropdown1" id="county" name="county" required>
                     <option value="" disabled selected>Select a County</option>
                     <option value="Antrim">Antrim</option>
                     <option value="Armagh">Armagh</option>
@@ -131,18 +168,18 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             </td>
             <td>
                 <label for="category">Category:</label><br>
-                <select id="category" name="category" required>
+                <select class = "dropdown2" id="category" name="category" required>
                     <option value="" disabled selected>Select a Category</option>
-                    <option value="Antrim">Handy Man</option>
-                    <option value="Armagh">Electrical</option>
-                    <option value="Carlow">Plubming</option>
-                    <option value="Cavan">Carpenter</option>
-                    <option value="Clare">Landscaping</option>
+                    <option value="Hand Man">Handy Man</option>
+                    <option value="Electrical">Electrical</option>
+                    <option value="Plubming">Plubming</option>
+                    <option value="Carpenter">Carpenter</option>
+                    <option value="Landscaping">Landscaping</option>
                 </select>
             </td>
             <td rowspan = "2">
                 <label for="dess">Description:</label><br>
-                <input type="text" id="dess" name="dess" value="Enter">
+                <input class = dess type="text" id="dess" name="dess" >
             </td>
         </tr>
 
@@ -179,23 +216,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             </td>
         </tr>
         
-        
-        
-       
-       
-       
-        
-       
-        
-        
-
-        
     </table>
     </form>
 
-    <a href="Login.php">
-        <button class = "loginBtn" type = "button">Login</button>
+    <a  class = "backBtn" href="Login.php">
+       Go back
     </a>
+
+</div>
 
     
 </body>
