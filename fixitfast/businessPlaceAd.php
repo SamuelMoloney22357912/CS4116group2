@@ -51,6 +51,34 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
     echo($title);
 
+     // Handle Image Upload
+        $targetDir = "uploads/"; // Folder to store images
+    if (!file_exists($targetDir)) {
+        mkdir($targetDir, 0777, true); // Create folder if not exists
+    }
+
+    $imagePath = "";
+    if (isset($_FILES['imageUpload']) && $_FILES['imageUpload']['error'] == 0) {
+        $imageFileType = strtolower(pathinfo($_FILES["imageUpload"]["name"], PATHINFO_EXTENSION));
+        $allowedTypes = ["jpg", "jpeg", "png", "gif"];
+
+        if (in_array($imageFileType, $allowedTypes)) {
+            $imagePath = $targetDir . uniqid("img_", true) . "." . $imageFileType; // Unique filename
+
+            // Move file to uploads folder
+            if (move_uploaded_file($_FILES["imageUpload"]["tmp_name"], $imagePath)) {
+                echo "Image uploaded successfully: " . $imagePath; // Debugging output
+            } else {
+                die("Error moving uploaded file.");
+            }
+        } else {
+            die("Invalid image type. Only JPG, JPEG, PNG, and GIF are allowed.");
+        }
+    } else {
+        echo "No image uploaded or an error occurred.";
+    }
+
+
     
 
     if(!empty($title) && !empty($description) && !empty($price1)
@@ -61,9 +89,21 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         try{
 
         
-        $query = "insert into services (business_id, category_id, name,county, description, price1, price2, price3, description1, description2, description3, picture)
-         values('$bId', '$categoryId', '$title','$county','$description','$price1','$price2','$price3','$description1', '$description2', '$description3', '$picture')";
-        mysqli_query($con, $query);
+            $query = "INSERT INTO services (business_id, category_id, name, county, description, price1, price2, price3, description1, description2, description3, picture) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  
+            $stmt = mysqli_prepare($con, $query);
+            mysqli_stmt_bind_param($stmt, "iissssssssss", $bId, $categoryId, $title, $county, $description, $price1, $price2, $price3, $description1, $description2, $description3, $imagePath);
+            mysqli_stmt_execute($stmt);
+            
+            if (mysqli_stmt_affected_rows($stmt) > 0) {
+                echo "Data inserted successfully.";
+            } else {
+                echo "Error inserting data: " . mysqli_error($con);
+            }
+            
+            mysqli_stmt_close($stmt);
+  
 
         //header("Location: businessPlaceAd.php");
         
@@ -100,7 +140,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 <body>
     <div class="headings">
         <div class="leftHeadings">
-            <div class="homepage"><a href="home.php"> Home</a></div>
+            <div class="homepage"><a href="index.php"> Home</a></div>
             <div class="explore"> <a href="explore.php"> Explore</a></div>
             <div class="info"> <a href="info.php"> Info</a></div>
         </div>
@@ -116,15 +156,17 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     </div>
     <hr>
 
+    
+
+    <form method="post" enctype="multipart/form-data">
+
     <div class="uploadContainer">
         <label for="imageUpload">Upload a photo (MAX 300x200)</label>
-        <input type="file" id="imageUpload" accept="image/*">
+        <input type="file" id="imageUpload" name="imageUpload" accept="image/*">
         <p id="errorMessage" class="error"></p>
     </div>
 
     <br>
-
-    <form method="post">
 
     <div class="firstFields">
         <div>
