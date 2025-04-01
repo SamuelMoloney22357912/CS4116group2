@@ -1,0 +1,97 @@
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-form input {
+    width: 300px;
+    padding: 8px;
+    border: 2px solid #67AB9F;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.search-form button {
+    padding: 8px 15px;
+    background-color: #67AB9F;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background-color: #559c8e;
+}
+
+.business-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.business-card {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+/* Filters Section Styling */
+.filters-section {
+    margin-bottom: 30px;
+}
+
+.filters-section form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.filters-section .form-control {
+    width: 220px;
+    padding: 8px;
+    border: 2px solid #67AB9F;
+    border-radius: 5px;
+}
+
+.filters-section .col-md-3 {
+    flex: 1 1 22%;
+}
+
+.filters-section label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.filters-section button {
+    padding: 8px 15px;
+    background-color: #67AB9F;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.filters-section button:hover {
+    background-color: #559c8e;
+}
+
+/* Make the search form and filters responsive */
+@media (max-width: 768px) {
+    .filters-section form {
+        flex-direction: column;
+    }
+
+    .filters-section .form-control {
+        width: 100%;
+    }
+
+    .filters-section .col-md-3 {
+        flex: 1 1 100%;
+    }
+}
