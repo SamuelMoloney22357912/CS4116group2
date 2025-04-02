@@ -1,0 +1,137 @@
+.headings {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    flex-wrap: nowrap; 
+}
+
+.leftHeadings {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+    flex: 1; 
+}
+
+.mainHeading {
+    flex: 1; 
+    text-align: center;
+}
+
+.rightHeadings {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    flex: 1; 
+    white-space: nowrap; 
+}
+
+.uploadContainer {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 20px 0; 
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+}
+
+.firstFields {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.descriptionContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+#description {
+    width: 40%;
+    height: 100px;
+    padding: 8px;
+    font-size: 14px;
+    resize: vertical;
+}
+
+label {
+    display: block; /* Ensures the label is placed above the input */
+    margin-bottom: 8px; /* Adds space between the label and input field */
+    font-size: 16px;
+}
+
+.services {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin: 20px auto;
+    max-width: 800px;
+
+}
+
+.descriptions {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin: 20px auto;
+}
+
+.desc1, .desc2, .desc3 {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+}
+
+textarea {
+    padding: 8px;
+    font-size: 14px;
+    resize: vertical;
+    margin-top: 8px; 
+}
+label {
+    font-size: 16px;
+    margin-bottom: 8px; 
+}
+
+.post {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    
+}
+
+.postButton {
+    color: black !important;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: turquoise;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: -700px;
+}
+
+.postButton:hover {
+    background-color: #30c0b0;
+}
+
+

@@ -1,4 +1,3 @@
-/* General Styles */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #F0EFEF;
@@ -87,61 +86,110 @@ body {
     color: black;
 }
 
-/* Featured Ads Section */
-.feturedAds {
-    margin-top: 120px;
-}
 
-.Heading {
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 30px;
-    padding-top: 10px;
-    font-family: Helvetica ;
-}
-
-.ads {
-    display: flex;
-    justify-content: center;
+.ads-container {
+    
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important; /* 4 columns */
     gap: 20px;
     padding: 20px;
-    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.ad1, .ad2, .ad3 {
-    flex: 1;
+.ad-card {
     width: 100%;
-    max-width: 300px;
-}
-
-.ads img {
-    width: 100%;
-    border-radius: 10px;
+    max-width: 280px;
+    text-align: center;
+   
+    padding: 15px;
+   
     
 }
 
-/* See More Button */
-.moreBtn {
-    margin-top: 20px;
+.ad-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
 }
 
-.seeMoreBtn {
-    background: transparent;
-    border: 2px solid #008080;
-    padding: 8px 20px;
+.ads {
+    margin-top: 50px;
+}
+
+.serach{
+    padding-top: 120px;
+}
+
+
+.noResDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+
+}
+
+.filters {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.search {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+
+.serachbar{
+    width: 600px;
+    padding: 10px;
+    font-size: 1.2em;
+    border: 2px solid teal;
     border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-.seeMoreBtn:hover {
-    background-color: #008080;
-    color: white;
+    outline: none;
 }
 
-.seeMoreBtn a {
-    text-decoration: none;
-    color: black;
+
+.serachBtn{
+    border-radius: 10px;
+    border: 2px solid teal;
+    padding: 10px;
+
 }
+
+.dropdowns {
+    display: flex;
+    gap: 15px;
+}
+
+.dropdowns select {
+    font-size: 1.1em;
+    padding: 5px 15px;
+    border: 2px solid teal;
+    border-radius: 10px;
+    background: #f8f8f8;
+    cursor: pointer;
+    text-align: center;
+}
+
+.dropdowns select:focus {
+    outline: none;
+    border-color: darkcyan;
+}
+
+.applyFil{
+    border-radius: 10px;
+    border: 2px solid teal;
+    padding: 10px;
+}
+
+
+
+
 
