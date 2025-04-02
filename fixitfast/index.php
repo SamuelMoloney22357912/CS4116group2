@@ -5,7 +5,7 @@
 
     $user_data = check_login($con);
     $hideButton = ($user_data && $user_data['business'] == 1);
-    $settings_link = ($user_data && $user_data['business'] == 1) ? "busSettingsTest.php" : "user_profile_settings.php";
+    $settings_link = ($user_data && $user_data['business'] == 1) ? "busSettingsTest .php" : "user_profile_settings.php";
 
     
 
@@ -70,6 +70,7 @@
 
     <div class = "feturedAds">
         <div class = "Heading">
+            <H1 class = AdHeading>Fetured Business</H1>
 
         </div>
         <div class = "ads">

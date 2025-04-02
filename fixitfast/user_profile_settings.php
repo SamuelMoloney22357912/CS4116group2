@@ -29,12 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     $stmt->bind_param("si", $hashedPassword, $user_data['user_id']);
                     $stmt->execute();
                     $stmt->close();
+
                 } else {
                     $updateMessage = "Passwords do not match.";
                 }
             }
-
-           
 
             $stmt = $con->prepare("SELECT * FROM users WHERE user_id=?");
             $stmt->bind_param("i", $user_data['user_id']);
@@ -88,20 +87,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 <p class="success-message"><?php echo htmlspecialchars($updateMessage); ?></p>
             <?php } ?>
 
-           
+            <div class="profile-edit">
+                <div class="profile-image">
+                    <img src="images/<?php echo htmlspecialchars($user_data['profile_picture']); ?>" alt="Profile Picture">
+                    <a href="edit_picture.php">Edit Profile Picture</a>
+                </div>
 
-                <form method="post" enctype="multipart/form-data">
-
-                    <div class="profile-image">
-                        <img src="<?php echo $profilePicture; ?>" alt="Profile Picture">
-                        <p><?php echo htmlspecialchars($user_data['first_name'] . " " . $user_data['last_name']); ?></p>
-                    </div>
-
-                    <div class="uploadContainer">
-                        <label for="imageUpload">Upload a Profile Image (MAX 300x200)</label>
-                        <input type="file" id="imageUpload" accept="image/*">
-                        <p id="errorMessage" class="error"></p>
-                    </div>
+                <form method="post">
                     <div class="input-group">
                         <label for="first_name">Edit First Name:</label>
                         <input type="text" id="first_name" name="first_name" value="<?php echo htmlspecialchars($user_data['first_name']); ?>">
@@ -126,6 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             ];
 
                             foreach ($counties as $countyOption) {
+                                // Check if the county is the one the user has currently selected
                                 $selected = ($countyOption == $user_data['county']) ? 'selected' : '';
                                 echo "<option value='$countyOption' $selected>$countyOption</option>";
                             }

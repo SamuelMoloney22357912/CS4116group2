@@ -12,6 +12,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     $lName = $_POST['lName'];
     $county = $_POST['county'];
     $cPassword = $_POST['ConPassword'];
+    $business = 0;
+    $verified = 0;
+    $admin = 0;
+    $profilePic = "";
 
     $checkQuery = "SELECT * FROM users WHERE user_name = '$uName' LIMIT 1";
     
@@ -22,6 +26,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     }else{
 
 
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
         if(!empty($uName) && !empty($fName) && !empty($lName) && !empty($password)){
 
             $result = mysqli_query($con, $checkQuery);
@@ -29,20 +35,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                 $userEx = "Username is taken";
                 echo($userEx);
             }else{
-
                 echo("inside if");
                 try{
-                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                    $query = "insert into Users (first_name,last_name,user_name,password,county,business, verified, admin,profile_pic) values('$fName','$lName','$uName','$hashedPassword','$county','$business','$verified','$admin','$profilePic')";
+                    mysqli_query($con, $query);
 
-                    $query = "INSERT INTO Users (first_name, last_name, user_name, password, county) 
-                              VALUES ('$fName', '$lName', '$uName', '$hashedPassword', '$county')";
-                    if (mysqli_query($con, $query)) {
-                        header("Location: Login.php");
-                        exit();
-                    } else {
-                        echo "Error: " . mysqli_error($con); // 🔹 Show error if query fails
-                    }
-                } catch (mysqli_sql_exception $e) {
+                    
+
+                }catch(mysqli_sql_exception $e){
                     die("Database insert error: " . $e->getMessage());
                 }
                 header("Location: Login.php");
@@ -87,12 +87,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             <tr>
                 <td>
                     <label for="fName"> First Name:</label><br>
-                    <input type="text" id="fName" name="fName" value="Enter">
+                    <input type="text" id="fName" name="fName" placeholder="Enter">
 
                 </td>
                 <td>
                     <label for="lName"> Last Name:</label><br>
-                    <input type="text" id="lName" name="lName" value="Enter">
+                    <input type="text" id="lName" name="lName" placeholder="Enter">
 
                 </td>
             </tr>
@@ -100,12 +100,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             <tr>
                 <td>
                     <label for="uName">User Name:</label><br>
-                    <input type="text" id="uName" name="uName" value="Enter">
+                    <input type="text" id="uName" name="uName" placeholder="Enter">
 
                 </td>
                 <td>
                     <label for="password">Password:</label><br>
-                    <input type="text" id="password" name="password" value="Enter">
+                    <input type="password" id="password" name="password" placeholder="Enter">
 
                 </td>
             </tr>
@@ -152,7 +152,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                 </td>
                 <td>
                     <label for="ConPassword">Confirm Password:</label><br>
-                    <input type="text" id="ConPassword" name="ConPassword" value="Enter">
+                    <input type="password" id="ConPassword" name="ConPassword" placeholder="Enter">
 
                 </td>
             </tr>

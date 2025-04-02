@@ -3,36 +3,45 @@ session_start();
 include("connection.php");
 include("functions.php");
 
+//$text = "Hi";
 
 if($_SERVER['REQUEST_METHOD'] == "POST"){
-    $uName = trim($_POST['uName']);
+    $uName = $_POST['uName'];
     $password = $_POST['password'];
+    //$fName =$_POST['fName'];
+    //$lName = $_POST['lName'];
+    //$county = $_POST['county'];
 
     if(!is_numeric($uName) && !empty($uName)){
-        $query = "SELECT * FROM Users WHERE user_name = ? LIMIT 1";
+        //save to database
+        //$user_id = random_num(20);
         
-        if ($stmt = $con->prepare($query)) {
-            $stmt->bind_param("s", $uName);
-            $stmt->execute();
-            $result = $stmt->get_result();
 
-            if($result->num_rows > 0){ 
-                $user_data = $result->fetch_assoc();
+        $query = "select * from Users where user_name = '$uName' limit 1";
+        $result = mysqli_query($con, $query);
 
+        if($result){
+            echo("result");
+            if($result && mysqli_num_rows($result) > 0){ 
+                $user_data = mysqli_fetch_assoc($result);
                 if(password_verify($password, $user_data['password'])){
+
                     $_SESSION['user_id'] = $user_data['user_id'];
+
                     header("Location: index.php");
-                    exit();
+                    die();
+
                 }
             }
-
-            $incorectInfo = "Incorrect username or password";
+            $incorectInfo = "Incorect username or password";
         }
-    } else {
-        $emptyFields = "Please enter a valid username and password";
+
+        
+    }else{
+        $emptyFields = "Plesse enter a valid name and password";
+        //echo "Plesse enter a valid name and password";
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -54,9 +63,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
     <form method = "post">
         <label for="uName">User Name:</label><br>
-        <input type="text" id="uName" name="uName" value="Enter"><br>
+        <input type="text" id="uName" name="uName" placeholder="Enter"><br>
         <label for="password">Password:</label><br>
-        <input type="text" id="password" name="password" value="Enter"><br><br>
+        <input type="password" id="password" name="password" placeholder="Enter"><br><br>
         <input type="submit" value="Login">
     </form>
 

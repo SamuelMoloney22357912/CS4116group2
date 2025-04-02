@@ -17,6 +17,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     $cPassword = $_POST['cPassword'];
     $oId = 1;
     $business = 1;
+    $verified = 0;
+    $admin = 0;
+    $profilePic = "";
     //for test purposes.
     $lName = "";
 
@@ -28,13 +31,16 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         $matchErr = "The passwords do not match";
         echo($matchErr);
     }else{
+
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
         if(!empty($bName) && !empty($oName) && !empty($phoneN) && !empty($dess) && !empty($busUName) && !empty($password)){
             $result2 = mysqli_query($con, $checkUserMatch);
             if(mysqli_num_rows($result2) > 0){
                 $userEx = "Username is taken";
             }else{
                 try{
-                    $userQuery = "insert into Users (first_name,last_name,user_name,password,county,business) values('$oName','$lName','$busUName','$password','$county','$business')";
+                    $userQuery = "insert into Users (first_name,last_name,user_name,password,county,business,verified,admin,profile_pic) values('$oName','$lName','$busUName','$hashedPassword','$county','$business','$verified','$admin','$profilePic')";
                     mysqli_query($con, $userQuery);
                 }catch(mysqli_sql_exception $x){
                     die("Database insert error for user table: " . $x->getMessage());
@@ -65,7 +71,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             }else{
                 echo("inside if");
                 try{
-                    $query = "insert into businesses (owner_id,owner_name,business_name,county,category,description,phone_no,user_name,password) values('$ownerId','$oName','$bName','$county','$category','$dess','$phoneN','$busUName','$password')";
+                    $query = "insert into businesses (owner_id,owner_name,business_name,county,category,description,phone_no,user_name,password) values('$ownerId','$oName','$bName','$county','$category','$dess','$phoneN','$busUName','$hashedPassword')";
                     mysqli_query($con, $query);
                     echo("Sucseful");
                 }catch(mysqli_sql_exception $e){
@@ -112,15 +118,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         <tr>
             <td>
                 <label for="bName"> Business Name:</label><br>
-                <input type="text" id="bName" name="bName" value="Enter">
+                <input type="text" id="bName" name="bName" placeholder="Enter">
             </td>
             <td>
                  <label for="oName"> Owner Name:</label><br>
-                    <input type="text" id="oName" name="oName" value="Enter">
+                    <input type="text" id="oName" name="oName" placeholder="Enter">
             </td>
             <td>
                 <label for="phoneN">phone Number:</label><br>
-                <input type="text" id="phoneN" name="phoneN" value="Enter">
+                <input type="text" id="phoneN" name="phoneN" placeholder="Enter">
 
             </td>
         </tr>
@@ -186,12 +192,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         <tr>
             <td>
                 <label for="busUName">User Name:</label><br>
-                <input type="text" id="busUName" name="busUName" value="username">
+                <input type="text" id="busUName" name="busUName" placeholder="Enter">
 
             </td>
             <td>
                 <label for="password">Password:</label><br>
-                <input type="text" id="password" name="password" value="">
+                <input type="password" id="password" name="password" placeholder="Enter">
 
             </td>
             <td>
@@ -204,7 +210,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             </td>
             <td>
                 <label for="cPassword">Confirm Password:</label><br>
-                <input type="text" id="cPassword" name="cPassword" value="">
+                <input type="password" id="cPassword" name="cPassword" placeholder="Enter">
             </td>
         </tr>
         <tr>
@@ -218,6 +224,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         
     </table>
     </form>
+
+    <p class = "error"><?php echo($userEx.$matchErr); ?></p>
 
     <a  class = "backBtn" href="Login.php">
        Go back
