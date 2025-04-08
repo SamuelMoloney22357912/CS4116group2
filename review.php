@@ -1,39 +1,36 @@
 <?php
 session_start();
-include("connection.php"); // Connect to the database
+include("connection.php");
+include("functions.php");
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $businessName = $_POST['businessName']; // Get business name
-    $comment = $_POST['comment']; // Get review comment
-    $rating = isset($_POST['rating']) ? intval($_POST['rating']) : 0; // Convert rating to integer (0-4)
+    $userId = 0;
+    $serviceId = 1;
+    $businessName = $_POST['business_name']; 
+    $rating = isset($_POST['rating']) ? intval($_POST['rating']) : 0; 
+    $comment = $_POST['comment'];
 
-    // Sanitize input to prevent SQL injection
-    $businessName = mysqli_real_escape_string($conn, $businessName);
-    $comment = mysqli_real_escape_string($conn, $comment);
-
-    // Insert review into database
-    if(!empty($commet)){
-        echo("inside if");
-
-        try{
-        
-            $query = "insert into reviews (business_name, comment, rating) values ('$businessName', '$comment', '$rating')";
     
-            if (mysqli_query($conn, $query)) {
-                echo "<script>alert('Review submitted successfully!'); window.location.href='review.html';</script>";
-            } else {
-                echo "<script>alert('Error submitting review: " . mysqli_error($conn) . "');</script>";
-            }
-    
-        }catch(mysqli_sql_exception $e){
-                die("Database insert error". $e->getMessage());
-        
-        
-    }
+    $businessName = mysqli_real_escape_string($con, $businessName);
+    $comment = mysqli_real_escape_string($con, $comment);
 
-        }else{
+    if (!empty($businessName) && !empty($rating) && !empty($comment)) {
+        try {
+            $query = "INSERT INTO reviews (service_id, business_name, user_id, rating, comment) VALUES 
+            ('$serviceId', '$businessName','$userId', '$rating', '$comment')";
 
+        if (mysqli_query($con, $query)) {
+            echo "<div id='submissionSuccess' style='display: none;'></div>";
+        } else {
+            echo "<script>alert('Error submitting review: " . mysqli_error($con) . "');</script>";
         }
+
+        } catch (mysqli_sql_exception $e) {
+            die("Database insert error: " . $e->getMessage());
+        }
+    } else {
+        echo "<script>alert('Please fill out all fields.');</script>";
+    }
 }
 ?>
 
@@ -75,12 +72,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <h2>Select Business:</h2>
     </div>
     <div>
-        <select class="dropdown" name="businessName">
-            <option value="" disabled selected>Choose an option</option>
-            <option value="business1">Business 1</option>
-            <option value="business2">Business 2</option>
-            <option value="business3">Business 3</option>
-        </select>
+    <select class="dropdown" name="business_name">
+    <option value="" disabled selected>Choose an option</option>
+    <option value="business1">Business 1</option>
+    <option value="business2">Business 2</option>
+    <option value="business3">Business 3</option>
+</select>
+
+<input type="hidden" name="rating" id="ratingInput">
+
     </div>
 </div>
 
@@ -120,30 +120,48 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     </div>
 
     <div id="thankYouMessage" class="thankYouMessage">
-        <h3>Thank you for your review!</h3>
-    </div>
+    <h3>Thank you for your review!</h3>
+</div>
+
+
+
+
 
 </form>
 
 <script>
         const stars = document.querySelectorAll('.star');
 
-        stars.forEach((star, index) => {
-            star.addEventListener('click', function() {
-                
-                stars.forEach(s => s.classList.remove('selected'));
+stars.forEach((star, index) => {
+    star.addEventListener('click', function() {
+        stars.forEach(s => s.classList.remove('selected'));
 
-                
-                for (let i = 0; i <= index; i++) {
-                    stars[i].classList.add('selected');
-                }
-            });
-        });
-        document.getElementById('submitButton').addEventListener('click', function() {
+        for (let i = 0; i <= index; i++) {
+            stars[i].classList.add('selected');
+        }
+
         
-        document.getElementById('thankYouMessage').style.display = 'block';
+        document.getElementById('ratingInput').value = star.getAttribute('data-value');
     });
+});
+
     </script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const successFlag = document.getElementById('submissionSuccess');
+        const thankYouMessage = document.getElementById('thankYouMessage');
+
+        if (successFlag && thankYouMessage) {
+            thankYouMessage.style.display = 'block';
+        }
+    });
+</script>
+
+
+
+
+
 
 
 </body>

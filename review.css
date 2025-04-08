@@ -145,6 +145,15 @@
     font-weight: 300;
 }
 
+.validationMessage {
+    text-align: center;
+    color: red;
+    font-size: 1.2rem;
+    margin-top: 10px;
+    display: none;
+    font-weight: 300;
+}
+
 
 
 
