@@ -5,7 +5,7 @@
 
     $user_data = check_login($con);
     $hideButton = ($user_data && $user_data['business'] == 1);
-    $settings_link = ($user_data && $user_data['business'] == 1) ? "busSettingsTest .php" : "user_profile_settings.php";
+    $settings_link = ($user_data && $user_data['business'] == 1) ? "editAds.php" : "user_profile_settings.php";
 
     
 
