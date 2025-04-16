@@ -263,8 +263,8 @@
     <div class="Heading"></div>
     <div class="ads-container">
         <?php if (empty($services)): ?>
-            <div class = "noResDiv">
-                <p class = "noResult">No ads found</p>
+            <div class="noResDiv">
+                <p class="noResult">No ads found</p>
             </div>
         <?php else: ?>
             <?php foreach ($services as $ad): 
@@ -283,6 +283,31 @@
         <?php endif; ?>
     </div>
 </div>
+
+<footer>
+    <div class="footer-content">
+        <div class="socials">
+            <a href="https://twitter.com" target="_blank"><img src="images/twitter-x-logo-F7DCE5534C-seeklogo.com.png" alt="X"></a>
+            <a href="https://instagram.com" target="_blank"><img src="images/Insta_Logo copy.webp" alt="Instagram"></a>
+            <a href="https://youtube.com" target="_blank"><img src="images/YouTube_play_button_square_(2013-2017).svg.png" alt="YouTube"></a>
+        </div>
+
+        <div class="contact-info">
+            <h3>Contact Us</h3>
+            <p><strong>General Enquiries:</strong> info@fixitfast.com</p>
+            <p><strong>Service Enquiries:</strong> services@fixitfast.com</p>
+            <p><strong>Office Location:</strong> 123 Main Street, Limerick</p>
+            <p><strong>Office Number:</strong> +353 1 234 5678</p>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2025 FixItFast. All rights reserved.</p>
+    </div>
+</footer>
+
+</div> 
+
    
     
 </body>
