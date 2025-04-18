@@ -24,7 +24,6 @@ $business_data = $result->fetch_assoc();
 $updateMessage = "";
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-   
     $ownerName = trim($_POST['owner_name']);
     $businessName = trim($_POST['business_name']);
     $county = trim($_POST['county']);
@@ -36,36 +35,43 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $confirmPassword = trim($_POST['confirm_password']);
 
     if (!empty($ownerName) && !empty($businessName) && !empty($county) && !empty($category) && !empty($descr) 
-        && !empty($phoneNumber) && !empty($userName) ) {
+        && !empty($phoneNumber) && !empty($userName)) {
         try {
-            $stmt = $con->prepare("UPDATE businesses SET owner_id=?, owner_name=?, business_name=?, county=?, category=?,
-            description=?, phone_no=?, user_name=?, password=?  WHERE business_id=?");
-
-            $stmt->bind_param("issssssss", $ownerId, $ownerName, $businessName, $county, $category, $descr,
-            $phoneNumber, $userName, $password);
-            $stmt->execute();
-            $stmt->close();
-
+            
             if (!empty($password)) {
-                if ($password === $confirmPassword) {
-                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-                    $stmt = $con->prepare("UPDATE businesses SET password=? WHERE business_id=?");
-                    $stmt->bind_param("si", $hashedPassword, $business_data['business_id']);
-                    $stmt->execute();
-                    $stmt->close();
-
-                } else {
+                if ($password !== $confirmPassword) {
                     $updateMessage = "Passwords do not match.";
                 }
             }
 
-            
-            //$stmt->close();
-
-            $_SESSION['business_data'] = $business_data;
-
             if (empty($updateMessage)) {
+                
+                $stmt = $con->prepare("UPDATE businesses SET owner_name=?, business_name=?, county=?, category=?,
+                description=?, phone_no=?, user_name=? WHERE business_id=?");
+                
+                $stmt->bind_param("sssssssi", $ownerName, $businessName, $county, $category, $descr,
+                $phoneNumber, $userName, $business_data['business_id']);
+                $stmt->execute();
+                $stmt->close();
+
+                
+                if (!empty($password)) {
+                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                    $stmt = $con->prepare("UPDATE businesses SET password=? WHERE business_id=?");
+                    $stmt->bind_param("si", $hashedPassword, $business_data['business_id']);
+                    $stmt->execute();
+                    $stmt->close();
+                }
+
+                
+                $stmt = $con->prepare("SELECT * FROM businesses WHERE business_id=?");
+                $stmt->bind_param("i", $business_data['business_id']);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $business_data = $result->fetch_assoc();
+                $stmt->close();
+
+                $_SESSION['business_data'] = $business_data;
                 $updateMessage = "Profile updated successfully!";
             }
         } catch (mysqli_sql_exception $e) {
@@ -76,7 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
 }
 ?>
-
             
             
             
@@ -128,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
                     <div class="input-group">
                         <label for="owner_name">Edit Owner Name:</label>
-                        <input type="text" id="owner_name" name="owner_name" value="<?php echo htmlspecialchars($user_data['first_name']); ?>">
+                        <input type="text" id="owner_name" name="owner_name" value="<?php echo htmlspecialchars($business_data['owner_name']); ?>">
                     </div>
 
     
@@ -187,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
                     <div class="input-group">
                         <label for="user_name">Edit Username:</label> 
-                        <input type="text" id="user_name" name="user_name" value="<?php echo htmlspecialchars($user_data['user_name']); ?>">
+                        <input type="text" id="user_name" name="user_name" value="<?php echo htmlspecialchars($business_data['user_name']); ?>">
                     </div>
 
                     <div class="desc">
