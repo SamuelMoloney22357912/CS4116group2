@@ -91,3 +91,16 @@ table{
     border-spacing: 20px;
     
 }
+
+.error{
+    text-align: center;
+    background-color: rgba(255, 0, 0, 0.5);
+    max-width: 200px;
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    margin: 0 auto;
+
+    
+}
+
