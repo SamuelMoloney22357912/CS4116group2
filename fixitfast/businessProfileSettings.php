@@ -54,11 +54,25 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $stmt->execute();
                 $stmt->close();
 
+                // Update user_name, first_name, and county in users table
+                $stmt = $con->prepare("UPDATE users SET   user_name=?, first_name=?, county=? WHERE user_id=?");
+                $stmt->bind_param("sssi", $userName, $ownerName, $county, $business_data['owner_id']);
+                $stmt->execute();
+                $stmt->close();
+
+
+
                 
                 if (!empty($password)) {
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                     $stmt = $con->prepare("UPDATE businesses SET password=? WHERE business_id=?");
                     $stmt->bind_param("si", $hashedPassword, $business_data['business_id']);
+                    $stmt->execute();
+                    $stmt->close();
+
+                    // Update password in users table
+                    $stmt = $con->prepare("UPDATE users SET password=? WHERE user_id=?");
+                    $stmt->bind_param("si", $hashedPassword, $business_data['owner_id']);
                     $stmt->execute();
                     $stmt->close();
                 }
@@ -153,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
                             foreach ($counties as $countyOption) {
                                 // Check if the county is the one the user has currently selected
-                                $selected = ($countyOption == $user_data['county']) ? 'selected' : '';
+                                $selected = ($countyOption == $business_data['county']) ? 'selected' : '';
                                 echo "<option value='$countyOption' $selected>$countyOption</option>";
                             }
                             ?>
@@ -179,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
                         foreach ($categories as $categoryOption) {
                             
-                            $selected = ($countyOption == $user_data['category']) ? 'selected' : '';
+                            $selected = ($categoryOption == $business_data['category']) ? 'selected' : '';
                             echo "<option value='$categoryOption' $selected>$categoryOption</option>";
                        
                         }
