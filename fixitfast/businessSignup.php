@@ -5,6 +5,15 @@ include("functions.php");
 //echo("HI");
 $text = "Hi";
 
+$categoryOptions = "";
+try {
+    $catQuery = "SELECT category_id, category_name FROM service_categories";
+    $catResult = mysqli_query($con, $catQuery);
+    
+} catch (mysqli_sql_exception $e) {
+    die("Error fetching categories: " . $e->getMessage());
+}
+
 if($_SERVER['REQUEST_METHOD'] == "POST"){
     $bName = $_POST['bName'];
     $oName = $_POST["oName"];
@@ -19,9 +28,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     $business = 1;
     $verified = 0;
     $admin = 0;
+    $ban = 0;
     $profilePic = "";
     //for test purposes.
     $lName = "";
+    $thkFSnUp = "";
 
     $checkUserMatchQuery = "SELECT * FROM businesses WHERE user_name = '$busUName' LIMIT 1";
     $checkUserMatch = "SELECT * FROM users WHERE user_name = '$busUName' LIMIT 1";
@@ -40,7 +51,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                 $userEx = "Username is taken";
             }else{
                 try{
-                    $userQuery = "insert into Users (first_name,last_name,user_name,password,county,business,verified,admin,profile_pic) values('$oName','$lName','$busUName','$hashedPassword','$county','$business','$verified','$admin','$profilePic')";
+                    $userQuery = "insert into users (first_name,last_name,user_name,password,county,business,verified,admin,ban,profile_pic) values('$oName','$lName','$busUName','$hashedPassword','$county','$business','$verified','$admin','$ban','$profilePic')";
                     mysqli_query($con, $userQuery);
                 }catch(mysqli_sql_exception $x){
                     die("Database insert error for user table: " . $x->getMessage());
@@ -74,13 +85,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                     $query = "insert into businesses (owner_id,owner_name,business_name,county,category,description,phone_no,user_name,password) values('$ownerId','$oName','$bName','$county','$category','$dess','$phoneN','$busUName','$hashedPassword')";
                     mysqli_query($con, $query);
                     echo("Sucseful");
+                    $thkFSnUp = "Thank you for signing up ";
                 }catch(mysqli_sql_exception $e){
                     die("Database insert error: " . $e->getMessage());
             }
             
-            sleep(1);
-            header("Location: Login.php");
-            die();
+            
+            //sleep(1);
+            //header("Location: Login.php");
+            //die();
             }
             
             
@@ -118,15 +131,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         <tr>
             <td>
                 <label for="bName"> Business Name:</label><br>
-                <input type="text" id="bName" name="bName" placeholder="Enter">
+                <input type="text" id="bName" name="bName" placeholder="Enter" value="<?php echo htmlspecialchars($_POST['bName'] ?? ''); ?>">
             </td>
             <td>
                  <label for="oName"> Owner Name:</label><br>
-                    <input type="text" id="oName" name="oName" placeholder="Enter">
+                    <input type="text" id="oName" name="oName" placeholder="Enter" value="<?php echo htmlspecialchars($_POST['oName'] ?? ''); ?>">
             </td>
             <td>
                 <label for="phoneN">phone Number:</label><br>
-                <input type="text" id="phoneN" name="phoneN" placeholder="Enter">
+                <input type="text" id="phoneN" name="phoneN" placeholder="Enter" value="<?php echo htmlspecialchars($_POST['phoneN'] ?? ''); ?>">
 
             </td>
         </tr>
@@ -176,23 +189,23 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                 <label for="category">Category:</label><br>
                 <select class = "dropdown2" id="category" name="category" required>
                     <option value="" disabled selected>Select a Category</option>
-                    <option value="Hand Man">Handy Man</option>
-                    <option value="Electrical">Electrical</option>
-                    <option value="Plubming">Plubming</option>
-                    <option value="Carpenter">Carpenter</option>
-                    <option value="Landscaping">Landscaping</option>
+                    <?php while ($row = mysqli_fetch_assoc($catResult)): ?>
+                    <option value="<?php echo htmlspecialchars($row['category_id']); ?>">
+                        <?php echo htmlspecialchars($row['category_name']); ?>
+                    </option>
+                    <?php endwhile; ?>
                 </select>
             </td>
             <td rowspan = "2">
                 <label for="dess">Description:</label><br>
-                <input class = dess type="text" id="dess" name="dess" >
+                <input class = dess type="text" id="dess" name="dess" value="<?php echo htmlspecialchars($_POST['dess'] ?? ''); ?>">
             </td>
         </tr>
 
         <tr>
             <td>
                 <label for="busUName">User Name:</label><br>
-                <input type="text" id="busUName" name="busUName" placeholder="Enter">
+                <input type="text" id="busUName" name="busUName" placeholder="Enter" value="<?php echo htmlspecialchars($_POST['busUName'] ?? ''); ?>">
 
             </td>
             <td>
@@ -224,14 +237,25 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         
     </table>
     </form>
+    <?php if (!empty($thkFSnUp)): ?>
+        <p class="thkYou"><?php echo $thkFSnUp; ?></p>
+            <script>
+            setTimeout(function() {
+                window.location.href = "Login.php";
+            }, 3000); // 1 seconds
+            </script>
+    <?php endif; ?>
 
-    <p class = "error"><?php echo($userEx.$matchErr); ?></p>
-
+    <?php if (!empty($matchErr)|| !empty($userEx) || !empty($eMessage)): ?>
+    <p class = "error"><?php echo($userEx.$matchErr.$eMessage); ?></p>
+    <?php endif; ?>
     <a  class = "backBtn" href="Login.php">
        Go back
     </a>
 
 </div>
+
+
 
     
 </body>

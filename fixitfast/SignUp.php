@@ -15,7 +15,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     $business = 0;
     $verified = 0;
     $admin = 0;
+    $ban = 0;
     $profilePic = "";
+    $thkFSnUp = "";
 
     $checkQuery = "SELECT * FROM users WHERE user_name = '$uName' LIMIT 1";
     
@@ -37,16 +39,22 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             }else{
                 echo("inside if");
                 try{
-                    $query = "insert into Users (first_name,last_name,user_name,password,county,business, verified, admin,profile_pic) values('$fName','$lName','$uName','$hashedPassword','$county','$business','$verified','$admin','$profilePic')";
+                    $query = "insert into users (first_name,last_name,user_name,password,county,business, verified, admin,ban,profile_pic) values('$fName','$lName','$uName','$hashedPassword','$county','$business','$verified','$admin','$ban','$profilePic')";
                     mysqli_query($con, $query);
+
+                    $thkFSnUp = "Thank you for signing up ";
+
+                    //sleep(1);
 
                     
 
                 }catch(mysqli_sql_exception $e){
                     die("Database insert error: " . $e->getMessage());
                 }
-                header("Location: Login.php");
-                    die();
+                
+                //Moved rediect to a js script in the html so that the thk you message can be seen
+                //header("Location: Login.php");
+                   // die();
                 
     
               
@@ -87,12 +95,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             <tr>
                 <td>
                     <label for="fName"> First Name:</label><br>
-                    <input type="text" id="fName" name="fName" placeholder="Enter">
+                    <input type="text" id="fName" name="fName" placeholder="Enter" value="<?php echo htmlspecialchars($_POST['fName'] ?? ''); ?>">
 
                 </td>
                 <td>
                     <label for="lName"> Last Name:</label><br>
-                    <input type="text" id="lName" name="lName" placeholder="Enter">
+                    <input type="text" id="lName" name="lName" placeholder="Enter" value="<?php echo htmlspecialchars($_POST['lName'] ?? ''); ?>">
 
                 </td>
             </tr>
@@ -100,7 +108,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             <tr>
                 <td>
                     <label for="uName">User Name:</label><br>
-                    <input type="text" id="uName" name="uName" placeholder="Enter">
+                    <input type="text" id="uName" name="uName" placeholder="Enter" value="<?php echo htmlspecialchars($_POST['uName'] ?? ''); ?>">
 
                 </td>
                 <td>
@@ -173,9 +181,18 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         
         
         
-
+        <?php if (!empty($thkFSnUp)): ?>
+        <p class="thkYou"><?php echo $thkFSnUp; ?></p>
+            <script>
+            setTimeout(function() {
+                window.location.href = "Login.php";
+            }, 3000); // 1 seconds
+            </script>
+        <?php endif; ?>
+        <?php if (!empty($matchErr)|| !empty($userEx) || !empty($eMessage)): ?>
         <p class = "message"> <?php echo($eMessage.$userEx.$matchErr); 
          ?></p>
+        <?php endif; ?>
 
 
         

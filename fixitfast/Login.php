@@ -17,23 +17,35 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         //$user_id = random_num(20);
         
 
-        $query = "select * from Users where user_name = '$uName' limit 1";
+        $query = "SELECT * FROM users WHERE BINARY user_name = '$uName' LIMIT 1";
         $result = mysqli_query($con, $query);
 
         if($result){
-            echo("result");
+            //echo("result");
             if($result && mysqli_num_rows($result) > 0){ 
                 $user_data = mysqli_fetch_assoc($result);
-                if(password_verify($password, $user_data['password'])){
 
-                    $_SESSION['user_id'] = $user_data['user_id'];
+                if($user_data['ban'] == '1'){
+                    $bannedMessage = "You have been banned and cannot log in.";
 
-                    header("Location: index.php");
-                    die();
+                }else{
+                    if(password_verify($password, $user_data['password'])){
+
+                        $_SESSION['user_id'] = $user_data['user_id'];
+    
+                        header("Location: index.php");
+                        die();
+    
+                    }else{
+                        $incorectInfo = "Incorect username or password";
+                    }
 
                 }
+                
+            }else{
+                $incorectInfo = "Incorect username or password";
             }
-            $incorectInfo = "Incorect username or password";
+            
         }
 
         
@@ -69,12 +81,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         <input type="submit" value="Login">
     </form>
 
-    <p class = "errorMessage">
-        <?php
-        echo($emptyFields);
-        echo($incorectInfo);
-        ?>
-    </p>
+   
+
+    <?php if (!empty($emptyFields)|| !empty($incorectInfo) || !empty($bannedMessage)): ?>
+    <p class = "errorMessage"><?php echo($emptyFields.$incorectInfo.$bannedMessage); ?></p>
+    <?php endif; ?>
 
     <a href="SignUp.php">
          <button class = "signup_button" type = "button">SignUp</button>
