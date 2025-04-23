@@ -3,16 +3,9 @@ session_start();
 include("connection.php");
 include("functions.php");
 
-
-$user_data = check_login($con);
-//$service_id = $_GET['service_id'];
-$service_id = isset($_GET['service_id']) ? intval($_GET['service_id']) : 0;
-//echo($service_id);
-
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $userId = $user_data['user_id'];
-    
-    //$serviceId = 1;
+    $userId = 0;
+    $serviceId = 1;
     $businessName = $_POST['business_name']; 
     $rating = isset($_POST['rating']) ? intval($_POST['rating']) : 0; 
     $comment = $_POST['comment'];
@@ -23,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     if (!empty($businessName) && !empty($rating) && !empty($comment)) {
         try {
-            $query = "INSERT INTO reviews (service_id, user_id, rating, comment) VALUES 
-            ('$service_id','$userId', '$rating', '$comment')";
+            $query = "INSERT INTO reviews (service_id, business_name, user_id, rating, comment) VALUES 
+            ('$serviceId', '$businessName','$userId', '$rating', '$comment')";
 
         if (mysqli_query($con, $query)) {
             echo "<div id='submissionSuccess' style='display: none;'></div>";
@@ -63,9 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 <body>
 <div class="heading">
     <div class="backContainer">
-        <a href="view_ad.php?id=<?php echo $service_id; ?>">
-        <button class="backButton">Back</button>
-        </a>
+        <button onclick="window.history.back();" class="backButton">Back</button>
     </div>
     <div class="headingCenter">
         <h1 class="reviewHeading">Review</h1>
@@ -102,11 +93,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     </div>
 
     <div class="stars" name="rating">
-        <span class="star" data-value="5">★</span>
-        <span class="star" data-value="4">★</span>
-        <span class="star" data-value="3">★</span>
-        <span class="star" data-value="2">★</span>
         <span class="star" data-value="1">★</span>
+        <span class="star" data-value="2">★</span>
+        <span class="star" data-value="3">★</span>
+        <span class="star" data-value="4">★</span>
+        <span class="star" data-value="5">★</span>
     </div>
 </div>
 <br>
@@ -149,8 +140,18 @@ stars.forEach((star, index) => {
             stars[i].classList.add('selected');
         }
 
-        
         document.getElementById('ratingInput').value = star.getAttribute('data-value');
+    });
+
+    star.addEventListener('mouseover', function() {
+        stars.forEach(s => s.classList.remove('hover'));
+        for (let i = 0; i <= index; i++) {
+            stars[i].classList.add('hover');
+        }
+    });
+
+    star.addEventListener('mouseout', function() {
+        stars.forEach(s => s.classList.remove('hover'));
     });
 });
 
@@ -175,5 +176,4 @@ stars.forEach((star, index) => {
 
 </body>
 </html>
-
 
