@@ -63,6 +63,8 @@ $ad['description3'] = nl2br(htmlspecialchars($ad['description3']));
             <a href="inquiries.php" class="bg-[#67AB9F] text-white px-4 py-2 rounded hover:bg-[#579c8f] transition">
                Inquire About This Service
             </a>
+
+            <a href="review.php?service_id=<?php echo $service_id; ?>" class="bg-[#67AB9F] text-white px-4 py-2 rounded hover:bg-[#579c8f] transition"> Leave a Review</a>
         </div>
 
         <!-- Description + Prices -->
