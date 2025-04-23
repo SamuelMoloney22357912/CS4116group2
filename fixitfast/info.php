@@ -1,6 +1,12 @@
 <?php
-// Start session if needed
+
 session_start();
+
+include("connection.php");
+include("functions.php");
+$user_data = check_login($con);
+$hideButton = ($user_data && $user_data['business'] == 1);
+$settings_link = ($user_data && $user_data['business'] == 1) ? "businessProfileSettings.php" : "user_profile_settings.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,14 +17,45 @@ session_start();
     <link rel="stylesheet" href="./css/info.css">
 </head>
 <body>
-    <header>
-        <div class="logo">FixItFast</div>
-        <nav>
+<div class = "navbar">
+    <div class = "pageOpt">
+        <button class ="home">
             <a href="index.php">Home</a>
+        </button>
+
+        <button class ="explore">
             <a href="explore.php">Explore</a>
-            <a href="contact.php">Contact</a>
-        </nav>
-    </header>
+        </button>
+
+        <button class ="info">
+            <a href="info.php">Info</a>
+        </button>
+    </div>
+    <div class = "logo">
+        <a href="index.php">
+            <img src="./images/fixitfast_logo.png" alt="">
+        </a>
+
+    </div>
+    <div class = "rightBtn">
+    <?php if ($hideButton): ?>
+        <button class = "placeAdBtn">
+            <a href="businessPlaceAd.php">Place Ad</a>
+        </button>
+    <?php endif; ?>
+        <a class = "messageBtn" href="messages.php">
+            <img src="./images/mail_logo_navbar.png" alt="">
+        </a>
+
+        <a class = "inquireBtn" href="inquire.php">
+            <img src="./images/inquires_logo_navbar.png" alt="">
+        </a>
+        <a class = "settingsBtn" href= "<?php echo $settings_link; ?>">
+            <img src="./images/settings_logo_navbar.png" alt="Settings">
+        </a>
+
+    </div>
+</div>
 
     <main>
         <section class="hero">
@@ -56,7 +93,7 @@ session_start();
   <div class="footer-content">
   <div class="socials">
   <a href="https://twitter.com" target="_blank"><img src="images/twitter-x-logo-F7DCE5534C-seeklogo.com.png" alt="X"></a>
-  <a href="https://instagram.com" target="_blank"><img src="images/Insta_Logo copy.webp" alt="Instagram"></a>
+  <a href="https://instagram.com" target="_blank"><img src="images/Insta_Logo.webp" alt="Instagram"></a>
   <a href="https://youtube.com" target="_blank"><img src="images/YouTube_play_button_square_(2013-2017).svg.png" alt="YouTube"></a>
 </div>
 
