@@ -7,6 +7,26 @@ $user_data = check_login($con);
 $hideButton = ($user_data && $user_data['admin'] == 1);
 
 $updateMessage = "";
+$profilePicture = 'uploads/profile_images/default-profile.jpg'; 
+
+if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == 0) {
+    $targetDir = "uploads/profile_images/";
+    $imageFileType = pathinfo($_FILES["profile_picture"]["name"], PATHINFO_EXTENSION);
+    $targetFile = $targetDir . $user_data['user_id'] . "." . $imageFileType;
+
+    if (getimagesize($_FILES["profile_picture"]["tmp_name"]) !== false) {
+        if (move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $targetFile)) {
+            $stmt = $con->prepare("UPDATE users SET profile_pic=? WHERE user_id=?");
+            $stmt->bind_param("si", $targetFile, $user_data['user_id']);
+            $stmt->execute();
+            $stmt->close();
+        } else {
+            $updateMessage = "Error uploading file.";
+        }
+    } else {
+        $updateMessage = "The file is not an image.";
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $fName = trim($_POST['first_name']);
@@ -55,6 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $updateMessage = "Please fill out all fields.";
     }
 }
+if (!empty($user_data['profile_pic']) && file_exists($user_data['profile_pic'])) {
+    $profilePicture = $user_data['profile_pic'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -87,64 +110,85 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             <h1>User Profile</h1>
 
             <?php if (!empty($updateMessage)) { ?>
-                <p class="success-message"><?php echo htmlspecialchars($updateMessage); ?></p>
+                <p class="<?php echo (strpos(strtolower($updateMessage), 'success') !== false) ? 'success-message' : 'error-message'; ?>">
+                    <?php echo htmlspecialchars($updateMessage); ?>
+                </p>
             <?php } ?>
 
-            <div class="profile-edit">
-                <div class="profile-image">
-                    <img src="images/<?php echo htmlspecialchars($user_data['profile_picture']); ?>" alt="Profile Picture">
-                    <a href="edit_picture.php">Edit Profile Picture</a>
+            <form method="post" enctype="multipart/form-data">
+
+                <div class="profile-image" style="position: relative; display: flex; justify-content: center; flex-direction: column; align-items: center;">
+                    <div style="position: relative;">
+                        <img src="<?php echo $profilePicture; ?>" alt="Profile Picture">
+                        <div class="edit-badge">Edit</div>
+                    </div>
+                    <p style="margin-top: 10px;"><?php echo htmlspecialchars($user_data['first_name'] . " " . $user_data['last_name']); ?></p>
                 </div>
 
-                <form method="post">
-                    <div class="input-group">
-                        <label for="first_name">Edit First Name:</label>
-                        <input type="text" id="first_name" name="first_name" value="<?php echo htmlspecialchars($user_data['first_name']); ?>">
-                    </div>
+                <script>
+                    const profileImg = document.querySelector('.profile-image img');
+                    const editBadge = document.querySelector('.edit-badge');
 
-                    <div class="input-group">
-                        <label for="last_name">Edit Surname:</label>
-                        <input type="text" id="last_name" name="last_name" value="<?php echo htmlspecialchars($user_data['last_name']); ?>">
-                    </div>
+                    profileImg.addEventListener('click', function() {
+                        document.getElementById('profile_picture').click();
+                    });
 
-                    <div>
-                        <label for="county">County:</label><br>
-                        <select class="dropdown" id="county" name="county" required>
-                            <option value="" disabled>Select a County</option>
-                            <?php
-                            $counties = [
-                                "Antrim", "Armagh", "Carlow", "Cavan", "Clare", "Cork", "Derry", "Donegal", 
-                                "Down", "Dublin", "Fermanagh", "Galway", "Kerry", "Kildare", "Kilkenny", 
-                                "Laois", "Leitrim", "Limerick", "Longford", "Louth", "Mayo", "Meath", "Monaghan", 
-                                "Offaly", "Roscommon", "Sligo", "Tipperary", "Tyrone", "Waterford", "Westmeath", 
-                                "Wexford", "Wicklow"
-                            ];
+                    editBadge.addEventListener('click', function() {
+                        document.getElementById('profile_picture').click();
+                    });
+                </script>
 
-                            foreach ($counties as $countyOption) {
-                                // Check if the county is the one the user has currently selected
-                                $selected = ($countyOption == $user_data['county']) ? 'selected' : '';
-                                echo "<option value='$countyOption' $selected>$countyOption</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
+                <div class="uploadContainer">
+                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+                    <p id="errorMessage" class="error"></p>
+                </div>
 
-                    <div class="input-group">
-                        <label for="password">Edit Password:</label>
-                        <input type="password" id="password" name="password" placeholder="*****">
-                    </div>
+                <div class="input-group">
+                    <label for="first_name">Edit First Name:</label>
+                    <input type="text" id="first_name" name="first_name" value="<?php echo htmlspecialchars($user_data['first_name']); ?>">
+                </div>
 
-                    <div class="input-group">
-                        <label for="confirm_password">Confirm Password:</label>
-                        <input type="password" id="confirm_password" name="confirm_password" placeholder="*****">
-                    </div>
+                <div class="input-group">
+                    <label for="last_name">Edit Surname:</label>
+                    <input type="text" id="last_name" name="last_name" value="<?php echo htmlspecialchars($user_data['last_name']); ?>">
+                </div>
 
-                    <div class="input-group">
-                        <input type="submit" value="Save Changes" class="button">
-                    </div>
-                    
-                </form>
-            </div>
+                <div>
+                    <label for="county">County:</label><br>
+                    <select class="dropdown" id="county" name="county" required>
+                        <option value="" disabled>Select a County</option>
+                        <?php
+                        $counties = [
+                            "Antrim", "Armagh", "Carlow", "Cavan", "Clare", "Cork", "Derry", "Donegal", 
+                            "Down", "Dublin", "Fermanagh", "Galway", "Kerry", "Kildare", "Kilkenny", 
+                            "Laois", "Leitrim", "Limerick", "Longford", "Louth", "Mayo", "Meath", "Monaghan", 
+                            "Offaly", "Roscommon", "Sligo", "Tipperary", "Tyrone", "Waterford", "Westmeath", 
+                            "Wexford", "Wicklow"
+                        ];
+
+                        foreach ($counties as $countyOption) {
+                            $selected = ($countyOption == $user_data['county']) ? 'selected' : '';
+                            echo "<option value='$countyOption' $selected>$countyOption</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Edit Password:</label>
+                    <input type="password" id="password" name="password" placeholder="*****">
+                </div>
+
+                <div class="input-group">
+                    <label for="confirm_password">Confirm Password:</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="*****">
+                </div>
+
+                <div class="input-group">
+                    <input type="submit" value="Save Changes" class="button">
+                </div>
+
+            </form>
         </div>
     </div>
 
