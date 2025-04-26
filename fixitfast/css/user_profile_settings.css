@@ -1,11 +1,12 @@
 body {
     background-color: #f0f0f0;
     font-family: Arial, sans-serif;
+    margin: 0;
+    height: 100%;
 }
 
 .container {
     display: flex;
-    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
@@ -67,6 +68,7 @@ body {
     height: 120px;
     border-radius: 50%;
     object-fit: cover;
+    border: 3px solid #1abc9c;
 }
 
 .profile-image a {
@@ -77,8 +79,36 @@ body {
     font-weight: bold;
 }
 
+.edit-badge {
+    position: absolute;
+    top: 50%;
+    right: -20px;
+    transform: translateY(-50%);
+    background-color: #1abc9c;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: background-color 0.3s;
+    white-space: nowrap;
+}
+
+.edit-badge:hover {
+    background-color: #16a085;
+}
+
+
+
+input[type="file"] {
+    display: none;
+}
+
 .input-group {
     margin-bottom: 20px;
+    width: 100%;
 }
 
 .input-group label {
@@ -93,24 +123,13 @@ body {
     border-radius: 4px;
 }
 
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
 select {
     margin-bottom: 20px;
 }
 
-.wrap {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .button {
     width: 100%;
+    max-width: 400px;
     height: 60px;
     font-family: 'Roboto', sans-serif;
     font-size: 13px;
@@ -118,25 +137,58 @@ select {
     letter-spacing: 2.5px;
     font-weight: 500;
     color: #fff;
-    background-color: #1abc9c; /* Matching color with menu items */
+    background-color: #1abc9c;
     border: none;
-    border-radius: 4px;  /* Rectangular button */
+    border-radius: 4px;
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease 0s;
+    transition: all 0.3s ease;
     cursor: pointer;
     outline: none;
-    display: inline-block;
+    display: block;       
+    margin: 20px auto;     
     text-align: center;
     line-height: 45px;
 }
 
 .button:hover {
     background-color: #16a085;
+    max-width: 400px;
 }
 
 input[type="submit"].button {
-    background-color: #1abc9c; /* Matching color with menu items */
+    background-color: #1abc9c;
     color: #fff;
+    max-width: 400px;
+    text-align: center;
+}
+.success-message {
+    background-color: #1abc9c; /* green for success */
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 20px auto; /* center the box */
+    font-weight: bold;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-in-out;
+    max-width: 400px;
+}
+
+.error-message {
+    background-color: red; /* green for success */
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 20px auto; /* center the box */
+    font-weight: bold;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-in-out;
+    max-width: 400px;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 input[type="submit"].button:hover {
@@ -144,4 +196,6 @@ input[type="submit"].button:hover {
     box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
     color: #fff;
     transform: translateY(-3px);
+    max-width: 400px;
+    text-align: center;
 }
