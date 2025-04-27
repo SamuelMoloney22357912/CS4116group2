@@ -1,30 +1,34 @@
-
 /* General Styling */
+
+
 body {
     font-family: 'Arial', sans-serif;
     background-color: #F0EFEF;
     color: #333;
     margin: 0;
     padding: 0;
-    text-align: center; /* <-- Center everything by default */
+    text-align: center;
+    padding-top: 80px
+}
+main {
+    margin-top: 0;
+    padding-top: 20px; 
 }
 
-/* Header Styling */
+
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     position: fixed;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
+    left: 0;
+    right: 0;
+    width: 100%;
     background-color: #F0EFEF;
     padding: 15px 20px;
     border-bottom: 2px solid #000;
-    box-shadow: none;
-    max-width: 1200px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+    z-index: 999;
 }
+
 
 .pageOpt button {
     background: none;
@@ -45,8 +49,7 @@ body {
     text-decoration: underline;
 }
 
-
-.info{
+.info {
     text-decoration: underline;
     font-weight: bold;
 }
@@ -55,14 +58,18 @@ body {
     width: 100%;
     max-width: 300px;
     border-color: #F0EFEF;
-    
 }
 
 .rightBtn {
     display: flex;
     align-items: center;
     gap: 20px;
+    position: absolute; 
+    top: 50%;
+    right: 20px; 
+    transform: translateY(-50%);
 }
+
 
 .rightBtn a img {
     width: 50px; /* Increased icon size */
@@ -81,7 +88,7 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.placeAdBtn:hover{
+.placeAdBtn:hover {
     background-color: #008080;
 }
 
@@ -90,35 +97,45 @@ body {
     color: black;
 }
 
+/* Hero Section - Background Image */
 .hero {
-    background-image: url('/fixitfast/images/depositphotos_80141498-stock-photo-do-it-yourself-and-home.jpg');
+    position: relative;
+    background-image: url('/fixitfast/images/depositphotos_80141498-stock-photo-do-it-yourself-and-home copy.jpg');
     background-size: cover;
     background-position: center;
-    color: whitesmoke;
+    color: #000;
     padding: 80px 20px;
-    margin-top: 110px;
     text-align: center;
-   
-    box-shadow: none;
+    border-top: 2.3px solid #000;
     border-bottom: 2px solid #000;
-    box-shadow: none;
-} 
-
-/* Hero Text */
-.hero h1 {
-    font-size: 3rem;
-    font-weight: bold;
-    margin-bottom: 20px;
 }
 
+/* Hero Text Box */
+.hero-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7); 
+    border-radius: 15px;
+    padding: 40px 30px; 
+    max-width: 80%; 
+    text-align: center;
+}
 
+.hero-text h1,
+.hero-text p {
+    color: #000;
+}
+
+.hero h1 {
+    font-size: 2.5rem; 
+}
 
 .hero p {
-    font-size: 1.5rem;
-    margin-top: 10px;
+    font-size: 1.2rem; 
 }
 
-/* Container for the main content */
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -143,7 +160,29 @@ body {
     line-height: 1.6;
 }
 
-/* Why Choose Us Section */
+.about-box {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 15px; 
+    border: 2px solid #008080; 
+    max-width: 600px;
+    margin: 0 auto; 
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    margin-top: 40px; 
+}
+
+.about-box h2 {
+    color: #008080;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.about-box p {
+    color: #555;
+    font-size: 1.2rem;
+}
+
 .why-choose-us {
     display: flex;
     justify-content: center;
@@ -188,7 +227,6 @@ body {
     font-size: 1.8rem;
     color: #008080;
     margin-bottom: 10px;
-    
 }
 
 .how-it-works .step p {
@@ -196,17 +234,23 @@ body {
     color: #555;
 }
 
-ul, ol {
+h2 {
+    text-align: center;
+    margin-bottom: 0px; 
+}
+
+ul {
     list-style-position: inside;
     padding-left: 0;
-    margin: 20px auto;
+    margin-top: 0px; 
+    margin-bottom: 10px; 
     display: inline-block;
     text-align: left;
 }
 
 li {
     text-align: left;
-    margin: 8px 0;
+    margin: 4px 0; 
 }
 
 /* CTA Button */
@@ -226,6 +270,7 @@ li {
 .cta-button:hover {
     background-color: #006f6f;
 }
+
 /* Footer */
 footer {
     background-color: #008080;
@@ -238,51 +283,48 @@ footer {
     text-align: center;
     border-top: 2.3px solid #000;
     box-shadow: none;
-  }
-  
-  .footer-content {
+}
+
+.footer-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
-  }
-  
-  .socials a img {
+}
+
+.socials a img {
     width: 30px;
     height: 30px;
     object-fit: contain;
     margin: 0 10px;
     transition: transform 0.3s ease;
-  }
-  
-  .socials a img:hover {
+}
+
+.socials a img:hover {
     transform: scale(1.2);
-  }
-  
-  
-  .contact-info {
+}
+
+.contact-info {
     text-align: center;
     max-width: 400px;
     border-bottom: 2px solid #000;
     box-shadow: none;
     max-width: 1200px;
-  }
-  
-  .contact-info h3 {
+}
+
+.contact-info h3 {
     margin-bottom: 10px;
     font-size: 1.2em;
     border-bottom: 2px solid #000;
     box-shadow: none;
     max-width: 1200px;
-  }
-  
-  .contact-info p {
+}
+
+.contact-info p {
     margin: 5px 0;
-  }
-  
-  .footer-bottom {
+}
+
+.footer-bottom {
     margin-top: 20px;
     font-size: 0.9em;
 }
-  
-
