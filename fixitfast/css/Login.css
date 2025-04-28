@@ -5,36 +5,74 @@ body {
     background-size: cover;
   }
 .continer{
-    background : #ededf3;
-    width : 450px;
-    padding : 10rem;
+    background : #67ab9f;
+    width : 200px;
+    padding : 75px;
     margin : 50px auto;
     border-radius: 10px;
     text-align: center;
-    margin-top: 15%;
+    margin-top: 10%;
     box-shadow: 10px 10px 10px black;
     border-style: solid;
-    border-color: rgb(85, 189, 135) ;
+    border-color: #67ab9f;
     border-width: 5px;
     
     
 }
 
 input{
-  padding: 1%;
-  border-color: rgb(85, 189, 135) ;
+  padding: 8px;
+  border-color: black;
   border-radius: 5px;
   border-width: 3px;
-  background-color: #ededf3;
+  background-color: white;
+  
+}
+
+label{
+  font-size: 20px;
+  color: white;
+  float: left;
+  margin-left: 10%;
 }
 
 .errorMessage{
   text-align: center;
-  background-color: rgba(255, 0, 0, 0.5);
+  background-color: rgba(255, 1, 1, 0.728);
   max-width: 200px;
   width: 100%;
   padding: 8px;
   border-radius: 6px;
-  margin: 0 auto;
+  margin: 20px auto;
+}
+
+.title{
+  padding-bottom:  15px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  color: white;
+}
+
+.options{
+  margin-top: 20px;
+  display: block;
+  color: black;
+}
+.signUpBtn{
+  display: block;
+  color: black;
+  
+}
+
+.bSellerBtn{
+  color: black;
+  
+}
+.loginBtn{
+  padding: 5px;
+  width: 120px;
+  max-width: 100%;
+}
+.loginBtn:hover{
+  background: gray;
 }
 

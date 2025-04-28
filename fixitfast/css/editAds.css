@@ -133,7 +133,7 @@ select {
 }
 
 .button:hover {
-    background-color: #67AB9F;
+    background-color: #16a085;
 }
 
 input[type="submit"].button {
@@ -142,7 +142,7 @@ input[type="submit"].button {
 }
 
 input[type="submit"].button:hover {
-    background-color: #2EE59D;
+    background-color:#16a085;
     box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
     color: #fff;
     transform: translateY(-3px);
@@ -212,7 +212,7 @@ input[type="submit"] {
 
 button:hover,
 input[type="submit"]:hover {
-    background-color: #3bbfb7;
+    background-color: #16a085;
 }
 
 .image-preview {
@@ -245,6 +245,11 @@ input[type="submit"]:hover {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 
 }
-
+.thkMsg{
+    text-align: center;
+    color: #67AB9F;
+    font-size: 18px;
+    font-weight: bold;
+}
 
 

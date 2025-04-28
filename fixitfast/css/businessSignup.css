@@ -7,17 +7,24 @@ body {
 
 
   .container {
-    background: #ededf3;
-    width: 50%;
-    margin: 15% auto 0 auto; /* Centers the container and adds top margin */
+    background: #67ab9f;
+    max-width: 100%;
+    width: 750px;
+    margin: 10% auto 0 auto; /* Centers the container and adds top margin */
     text-align: center;
-    padding: 20px;
+    padding: 8px;
     
-    border: 1px solid rgb(85, 189, 135); /* Keeps the green border */
+    border: 1px solid #67ab9f; /* Keeps the green border */
     border-radius: 10px;
     height: 500px;
+    padding-bottom: 50px;
     
     
+}
+.title{
+    padding-bottom:  15px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: white;
 }
 
 /* Centering the form fields */
@@ -28,10 +35,11 @@ body {
 /* Making the description input bigger */
 #dess {
     width: 100%;
-    height: 120px;
+    height: 115px;
+    width: 150px;
     resize: vertical;
     padding: 5px;
-    border: 3px solid rgb(85, 189, 135);
+    border: 3px solid black;
     border-radius: 5px;
 }
 
@@ -46,30 +54,55 @@ body {
 
 
 input{
-    padding: 2%;
-    border-color: rgb(85, 189, 135) ;
-    border-radius: 5px;
-    border-width: 3px;
-    background-color: #ededf3;
+  padding: 8px;
+  border-color: black;
+  border-radius: 5px;
+  border-width: 3px;
+  background-color: white;
+}
+
+label{
+    color: white;
+    font-size: 18px;
+    
 }
 .dess{
     width: 100%;
     height: 100px;
     resize: vertical;
+    
 }
 
+
 .dropdown1{
-    border-color:rgb(85, 189, 135) ;
+    padding: 8px;
+    border-color: black;
     border-radius: 5px;
     border-width: 3px;
-    background-color: #ededf3;
+    background-color: white;
+    font-size: 14px;
+    width: 160px;
+    max-width: 100%;
 }
 
 .dropdown2{
-    border-color:rgb(85, 189, 135) ;
+    padding: 8px;
+    border-color: black;
     border-radius: 5px;
     border-width: 3px;
-    background-color: #ededf3;
+    background-color: white;
+    font-size: 14px;
+    width: 160px;
+    max-width: 100%;
+}
+
+.signUpBtn{
+  padding: 5px;
+  width: 120px;
+  max-width: 100%;
+}
+.signUpBtn:hover{
+ background-color: gray;
 }
 
 
@@ -80,11 +113,13 @@ a{
 
 .backBtn{
     
-    text-align: left;
-    margin-left: -400px;
-    text-decoration: none;
+    float: left;
+    margin-top: -40px;
+    margin-left: 100px;
    
-    font-weight: bold;
+   
+   
+    
 }
 
 table{
@@ -99,7 +134,7 @@ table{
     width: 100%;
     padding: 8px;
     border-radius: 6px;
-    margin: 0 auto;
+    margin: -15px auto;
 
     
 }

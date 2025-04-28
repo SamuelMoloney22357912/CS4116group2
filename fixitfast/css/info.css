@@ -1,34 +1,30 @@
+
 /* General Styling */
-
-
 body {
     font-family: 'Arial', sans-serif;
     background-color: #F0EFEF;
     color: #333;
     margin: 0;
     padding: 0;
-    text-align: center;
-    padding-top: 80px
-}
-main {
-    margin-top: 0;
-    padding-top: 20px; 
+    text-align: center; /* <-- Center everything by default */
 }
 
-
+/* Header Styling */
 .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     position: fixed;
     top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
     background-color: #F0EFEF;
     padding: 15px 20px;
     border-bottom: 2px solid #000;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
-    z-index: 999;
+    box-shadow: none;
+    max-width: 1200px;
 }
-
 
 .pageOpt button {
     background: none;
@@ -49,7 +45,8 @@ main {
     text-decoration: underline;
 }
 
-.info {
+
+.info{
     text-decoration: underline;
     font-weight: bold;
 }
@@ -58,18 +55,14 @@ main {
     width: 100%;
     max-width: 300px;
     border-color: #F0EFEF;
+    
 }
 
 .rightBtn {
     display: flex;
     align-items: center;
     gap: 20px;
-    position: absolute; 
-    top: 50%;
-    right: 20px; 
-    transform: translateY(-50%);
 }
-
 
 .rightBtn a img {
     width: 50px; /* Increased icon size */
@@ -78,7 +71,7 @@ main {
 
 .placeAdBtn {
     background-color: transparent;
-    border: 2px solid #008080;
+    border: 2px solid #67ab9f;
     padding: 5px 10px; /* Reduced button size */
     border-radius: 8px;
     font-weight: bold;
@@ -88,8 +81,8 @@ main {
     transition: background-color 0.3s ease;
 }
 
-.placeAdBtn:hover {
-    background-color: #008080;
+.placeAdBtn:hover{
+    background-color: #67ab9f;
 }
 
 .placeAdBtn a {
@@ -97,45 +90,35 @@ main {
     color: black;
 }
 
-/* Hero Section - Background Image */
 .hero {
-    position: relative;
-    background-image: url('/fixitfast/images/depositphotos_80141498-stock-photo-do-it-yourself-and-home copy.jpg');
+    background-image: url('/fixitfast/images/depositphotos_80141498-stock-photo-do-it-yourself-and-home.jpg');
     background-size: cover;
     background-position: center;
-    color: #000;
+    color: whitesmoke;
     padding: 80px 20px;
+    margin-top: 110px;
     text-align: center;
-    border-top: 2.3px solid #000;
+   
+    box-shadow: none;
     border-bottom: 2px solid #000;
-}
+    box-shadow: none;
+} 
 
-/* Hero Text Box */
-.hero-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.7); 
-    border-radius: 15px;
-    padding: 40px 30px; 
-    max-width: 80%; 
-    text-align: center;
-}
-
-.hero-text h1,
-.hero-text p {
-    color: #000;
-}
-
+/* Hero Text */
 .hero h1 {
-    font-size: 2.5rem; 
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
+
+
 
 .hero p {
-    font-size: 1.2rem; 
+    font-size: 1.5rem;
+    margin-top: 10px;
 }
 
+/* Container for the main content */
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -149,7 +132,7 @@ main {
 
 .about-section h1 {
     font-size: 2.5rem;
-    color: #008080;
+    color: #67ab9f;
     margin-bottom: 20px;
     font-weight: bold;
 }
@@ -160,29 +143,7 @@ main {
     line-height: 1.6;
 }
 
-.about-box {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 15px; 
-    border: 2px solid #008080; 
-    max-width: 600px;
-    margin: 0 auto; 
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    margin-top: 40px; 
-}
-
-.about-box h2 {
-    color: #008080;
-    font-size: 2rem;
-    margin-bottom: 10px;
-}
-
-.about-box p {
-    color: #555;
-    font-size: 1.2rem;
-}
-
+/* Why Choose Us Section */
 .why-choose-us {
     display: flex;
     justify-content: center;
@@ -227,6 +188,7 @@ main {
     font-size: 1.8rem;
     color: #008080;
     margin-bottom: 10px;
+    
 }
 
 .how-it-works .step p {
@@ -234,23 +196,17 @@ main {
     color: #555;
 }
 
-h2 {
-    text-align: center;
-    margin-bottom: 0px; 
-}
-
-ul {
+ul, ol {
     list-style-position: inside;
     padding-left: 0;
-    margin-top: 0px; 
-    margin-bottom: 10px; 
+    margin: 20px auto;
     display: inline-block;
     text-align: left;
 }
 
 li {
     text-align: left;
-    margin: 4px 0; 
+    margin: 8px 0;
 }
 
 /* CTA Button */
@@ -270,10 +226,9 @@ li {
 .cta-button:hover {
     background-color: #006f6f;
 }
-
 /* Footer */
 footer {
-    background-color: #008080;
+    background-color: #67ab9f;
     color: white;
     padding: 20px 0;
     margin-top: 40px;
@@ -283,48 +238,74 @@ footer {
     text-align: center;
     border-top: 2.3px solid #000;
     box-shadow: none;
-}
-
-.footer-content {
+  }
+  
+  .footer-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
-}
-
-.socials a img {
+  }
+  
+  .socials a img {
     width: 30px;
     height: 30px;
     object-fit: contain;
     margin: 0 10px;
     transition: transform 0.3s ease;
-}
-
-.socials a img:hover {
+  }
+  
+  .socials a img:hover {
     transform: scale(1.2);
-}
-
-.contact-info {
+  }
+  
+  
+  .contact-info {
     text-align: center;
     max-width: 400px;
     border-bottom: 2px solid #000;
     box-shadow: none;
     max-width: 1200px;
-}
-
-.contact-info h3 {
+  }
+  
+  .contact-info h3 {
     margin-bottom: 10px;
     font-size: 1.2em;
     border-bottom: 2px solid #000;
     box-shadow: none;
     max-width: 1200px;
-}
-
-.contact-info p {
+  }
+  
+  .contact-info p {
     margin: 5px 0;
-}
-
-.footer-bottom {
+  }
+  
+  .footer-bottom {
     margin-top: 20px;
     font-size: 0.9em;
 }
+.about-box {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 15px; 
+    border: 3px solid #67ab9f; 
+    max-width: 600px;
+    margin: 0 auto; 
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    margin-top: 40px; 
+}
+
+.about-box h2 {
+    color: #67ab9f;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.about-box p {
+    color: #555;
+    font-size: 1.2rem;
+}
+
+  
+

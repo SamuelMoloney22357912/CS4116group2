@@ -1,9 +1,10 @@
+
 .heading {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: rgb(103, 171, 159);
-    padding: 12px 20px;
+    padding: 5px 20px;
     color: white;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -169,15 +170,3 @@
     display: none;
     font-weight: 300;
 }
-
-
-
-
-
-
-
-
-
-
-
-

@@ -7,19 +7,25 @@ body {
 
 
   .container{
-    background : #ededf3;
+    background : #67ab9f;
     width : 450px;
-    padding : 10rem;
+    padding : 60px;
     margin : 50px auto;
     border-radius: 10px;
     text-align: center;
-    margin-top: 15%;
+    margin-top: 7%;
     box-shadow: 10px 10px 10px black;
     border-style: solid;
-    border-color: rgb(85, 189, 135) ;
+    border-color: #67ab9f;
     border-width: 5px;
     
     
+}
+
+.title{
+    padding-bottom:  15px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: white;
 }
 
 .fields{
@@ -31,30 +37,51 @@ body {
 .signupBtn{
     float: right;
     margin-right: -100%;
+    width: 100px;
+    max-width: 100%;
+    font-size: 16px;
     
     
 
+}
+.signupBtn:hover{
+    background-color: grey;
 }
 
 input{
-    padding: 2%;
-    border-color: rgb(85, 189, 135) ;
+    padding: 8px;
+    border-color: black;
     border-radius: 5px;
     border-width: 3px;
-    background-color: #ededf3;
+    background-color: white;
 }
 
-.dropdown{
-    border-color:rgb(85, 189, 135) ;
+label{
+    font-size: 18px;
+    color: white;
+    float: left;
+    margin-left: 1%;
+  }
+
+select{
+    padding: 8px;
+    border-color: black;
     border-radius: 5px;
     border-width: 3px;
-    background-color: #ededf3;
+    background-color: white;
+    font-size: 14px;
+    width: 160px;
+    max-width: 100%;
+    
+
 }
+
+
 
 .navBtn{
     float: left;
     margin-left: 10%;
-    margin-top: -10%;
+    margin-top: -12%;
     
 }
 a{
@@ -67,10 +94,10 @@ table{
 
 .message{
     text-align: center;
-    background-color: rgba(255, 0, 0, 0.5);
+    background-color: rgba(255, 1, 1, 0.728);
     max-width: 200px;
     width: 100%;
     padding: 8px;
     border-radius: 6px;
-    margin: 0 auto;
+    margin: 20px auto;
 }

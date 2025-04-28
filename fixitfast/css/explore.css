@@ -31,6 +31,7 @@ body {
     cursor: pointer;
     margin-right: 20px;
     position: relative;
+    
 }
 
 .pageOpt button a {
@@ -42,14 +43,16 @@ body {
     text-decoration: underline;
 }
 
-.pageOpt button:first-child a {
+
+.explore{
     text-decoration: underline;
     font-weight: bold;
+
 }
 
 .logo img {
     width: 100%;
-    max-width: 200px;
+    max-width: 300px;
     border-color: #F0EFEF;
     
 }
@@ -67,7 +70,7 @@ body {
 
 .placeAdBtn {
     background-color: transparent;
-    border: 2px solid #008080;
+    border: 2px solid #67ab9f;
     padding: 5px 10px; /* Reduced button size */
     border-radius: 8px;
     font-weight: bold;
@@ -78,7 +81,7 @@ body {
 }
 
 .placeAdBtn:hover{
-    background-color: #008080;
+    background-color: #67ab9f;
 }
 
 .placeAdBtn a {
@@ -110,7 +113,9 @@ body {
 
 .ad-card img {
     max-width: 100%;
-    height: auto;
+    width: 280px;
+    height: 180px;
+
     border-radius: 8px;
 }
 
@@ -150,7 +155,7 @@ body {
     width: 600px;
     padding: 10px;
     font-size: 1.2em;
-    border: 2px solid teal;
+    border: 2px solid #67ab9f;
     border-radius: 10px;
     outline: none;
 }
@@ -158,9 +163,12 @@ body {
 
 .serachBtn{
     border-radius: 10px;
-    border: 2px solid teal;
-    padding: 10px;
+    border: 2px solid #67ab9f;
+    padding: 12px;
 
+}
+.serachBtn:hover{
+    background-color: #67ab9f;
 }
 
 .dropdowns {
@@ -171,7 +179,7 @@ body {
 .dropdowns select {
     font-size: 1.1em;
     padding: 5px 15px;
-    border: 2px solid teal;
+    border: 2px solid #67ab9f;
     border-radius: 10px;
     background: #f8f8f8;
     cursor: pointer;
@@ -185,13 +193,16 @@ body {
 
 .applyFil{
     border-radius: 10px;
-    border: 2px solid teal;
-    padding: 10px;
+    border: 2px solid #67ab9f;
+    padding: 8px;
+}
+.applyFil:hover{
+    background-color: #67ab9f;
 }
 
 /* Footer */
 footer {
-    background-color: teal;
+    background-color: #67ab9f;
     color: white;
     padding: 20px;
     text-align: center;
@@ -201,6 +212,9 @@ footer {
     border-top: 2.3px solid #000;
     box-shadow: none;
 }
+
+
+
 
   .footer-content {
     display: flex;
@@ -246,3 +260,8 @@ footer {
     margin-top: 20px;
     font-size: 0.9em;
 }
+
+
+
+
+
