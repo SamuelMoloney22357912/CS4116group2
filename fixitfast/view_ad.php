@@ -117,18 +117,18 @@ $average_rating = round($avg_row['avg_rating'], 1);
             <div class="bg-gray-50 p-4 rounded-lg mb-6">
                 <h3 class="text-lg font-semibold mb-2">Prices</h3>
                 <ul class="list-disc list-inside text-gray-800 space-y-1">
-                    <li>Price 1: <?= $ad['price1'] ?></li>
-                    <li>Price 2: <?= $ad['price2'] ?></li>
-                    <li>Price 3: <?= $ad['price3'] ?></li>
+                    <li>Price Service 1: €<?= $ad['price1'] ?></li>
+                    <li>Price Service 2: €<?= $ad['price2'] ?></li>
+                    <li>Price Service 3: €<?= $ad['price3'] ?></li>
                 </ul>
             </div>
 
             <!-- Extra Descriptions -->
             <div class="bg-gray-50 p-4 rounded-lg">
                 <h3 class="text-lg font-semibold mb-2">More Info</h3>
-                <p class="mb-2"><?= $ad['description1'] ?></p>
-                <p class="mb-2"><?= $ad['description2'] ?></p>
-                <p><?= $ad['description3'] ?></p>
+                <p class="mb-2">Service 1: <?= $ad['description1'] ?></p>
+                <p class="mb-2">Service 2: <?= $ad['description2'] ?></p>
+                <p>Service 3: <?= $ad['description3'] ?></p>
             </div>
         </div>
     </div>
