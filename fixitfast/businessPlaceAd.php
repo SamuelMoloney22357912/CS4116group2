@@ -8,25 +8,51 @@ ini_set('display_errors', 1);
 
 $user_data = check_login($con);
 $user_id = $user_data['user_id'];
+//echo($user_id);
+$sucMessage = "";
 
 $businessId = "SELECT business_id FROM businesses WHERE owner_id = '$user_id'";
+
+$cat = "SELECT category FROM businesses WHERE owner_id = '$user_id'";
 try{
     $queryRes = mysqli_query($con, $businessId);
     if($queryRes && mysqli_num_rows($queryRes) > 0){
+
         $row = mysqli_fetch_assoc($queryRes);
         $bId = $row['business_id'];
+
+        //echo ("Business ID: " . $bId);
+        
+
     }else{
         echo("No Id found");
     }
+    //var_dump($bId);
+    
+    //echo($bId);
+    $catRes = mysqli_query($con, $cat);
+    if($catRes && mysqli_num_rows($catRes) > 0){
+
+        $row1 = mysqli_fetch_assoc($catRes);
+        $categoryId = $row1['category'];
+
+        //echo ("Category ID: " . $categoryId);
+        
+
+    }else{
+        echo("No Id found");
+    }
+
 }catch(mysqli_sql_exception $e){
     die("Database fecth error: " . $e->getMessage());
+
 }
 
 
 if($_SERVER['REQUEST_METHOD'] == "POST"){
     
     //$businessIds = 1;
-    $categoryId = 0;
+    //$categoryId = 0;
     $title = $_POST['title'];
     $county = $_POST['county'];
     $description =$_POST['description'];
@@ -38,21 +64,66 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     $description3 = $_POST['description3'];
     $picture = "";
 
-    echo($title);
+    //echo($title);
+
+     // Handle Image Upload
+        $targetDir = "uploads/"; // Folder to store images
+    if (!file_exists($targetDir)) {
+        mkdir($targetDir, 0777, true); // Create folder if not exists
+    }
+
+    $imagePath = "";
+    if (isset($_FILES['imageUpload']) && $_FILES['imageUpload']['error'] == 0) {
+        $imageFileType = strtolower(pathinfo($_FILES["imageUpload"]["name"], PATHINFO_EXTENSION));
+        $allowedTypes = ["jpg", "jpeg", "png", "gif"];
+
+        if (in_array($imageFileType, $allowedTypes)) {
+            $imagePath = $targetDir . uniqid("img_", true) . "." . $imageFileType; // Unique filename
+
+            // Move file to uploads folder
+            if (move_uploaded_file($_FILES["imageUpload"]["tmp_name"], $imagePath)) {
+                //echo "Image uploaded successfully: " . $imagePath; // Debugging output
+            } else {
+                die("Error moving uploaded file.");
+            }
+        } else {
+            die("Invalid image type. Only JPG, JPEG, PNG, and GIF are allowed.");
+        }
+    } else {
+        $sucMessage = "No image uploaded or an error occurred.";
+    }
+
 
     
 
     if(!empty($title) && !empty($description) && !empty($price1)
         && !empty($price2) && !empty($price3) && !empty($description1) && !empty($description2) && !empty($description3)) {
+            
+
+            
         //save to database
         //$user_id = random_num(20);
-        echo("inside if");
+        //echo("inside if");
         try{
 
         
-        $query = "insert into services (business_id, category_id, name,county, description, price1, price2, price3, description1, description2, description3, picture)
-         values('$bId', '$categoryId', '$title','$county','$description','$price1','$price2','$price3','$description1', '$description2', '$description3', '$picture')";
-        mysqli_query($con, $query);
+            $query = "INSERT INTO services (business_id, category_id, name, county, description, price1, price2, price3, description1, description2, description3, picture) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  
+            $stmt = mysqli_prepare($con, $query);
+            mysqli_stmt_bind_param($stmt, "iissssssssss", $bId, $categoryId, $title, $county, $description, $price1, $price2, $price3, $description1, $description2, $description3, $imagePath);
+            mysqli_stmt_execute($stmt);
+            
+            if (mysqli_stmt_affected_rows($stmt) > 0) {
+                //echo "Data inserted successfully.";
+                $sucMessage = "AD Placed sucsufully";
+                //echo "$sucMessage";
+            } else {
+                echo "Error inserting data: " . mysqli_error($con);
+            }
+            
+            mysqli_stmt_close($stmt);
+  
 
         //header("Location: businessPlaceAd.php");
         
@@ -60,11 +131,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             die("Database insert error: " . $e->getMessage());
 
         }
-        header("Location: businessPlaceAd.php");
-        die();
+    
+        //header("Location: businessPlaceAd.php");
+        //die();
     }else{
         //$eMessage = "Make sure all boxes are filled";
-        echo ("Plesse enter a valid name and password");
+        $sucMessage =  ("Plesse Fill Out all fields");
     }
     
     
@@ -87,25 +159,36 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
 
 <body>
-    <div class="heading">
-        <div class="backContainer">
-            <button onclick="window.history.back();" class="backButton">Back</button>
-        </div>
-        <div class="headingCenter">
-            <h1 class="placeAdHeading">Place Ad</h1>
-        </div>
-    </div>
     
+
+        <div class="heading">
+         <div class="backContainer">
+            <a href="index.php">
+             <button class="backButton">Back</button>
+             </a>
+         </div>
+         <div class="headingCenter">
+             <h1 class="placeAdHeading">Place Ad</h1>
+         </div>
+     </div>
+
+     
+    
+
+    
+
+    <form method="post" enctype="multipart/form-data">
+    <div class = "message">
+        <p class = "sMessage"><?php echo($sucMessage);?></p>
+     </div>
 
     <div class="uploadContainer">
         <label for="imageUpload">Upload a photo (MAX 300x200)</label>
-        <input type="file" id="imageUpload" accept="image/*">
+        <input type="file" id="imageUpload" name="imageUpload" accept="image/*">
         <p id="errorMessage" class="error"></p>
     </div>
 
     <br>
-
-    <form method="post">
 
     <div class="firstFields">
         <div>
@@ -163,15 +246,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
      <div class="services">
         <div>
             <div><label for="service1">Service 1</label></div>
-            <div><textarea id="price1" name="price1" placeholder="price (in €)"></textarea></div>
+            <div><input type = "number" id="price1" name="price1" placeholder="price (in €)"></div>
         </div>
         <div>
             <div><label for="service2">Service 2</label></div>
-            <div><textarea id="price2" name="price2" placeholder="price (in €)"></textarea></div>
+            <div><input type = "number" id="price2" name="price2" placeholder="price (in €)"></div>
         </div>
         <div>
             <div><label for="service3">Service 3</label></div>
-            <div><textarea id="price3" name="price3" placeholder="price (in €)"></textarea></div>
+            <div><input type = "number" id="price3" name="price3" placeholder="price (in €)"></div>
         </div>
      </div>
 

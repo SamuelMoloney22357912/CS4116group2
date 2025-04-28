@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 include("connection.php");
@@ -22,6 +23,15 @@ $business_data = $result->fetch_assoc();
 //echo($business_data['description']);
 
 $updateMessage = "";
+
+$categoryOptions = "";
+try {
+    $catQuery = "SELECT category_id, category_name FROM service_categories";
+    $catResult = mysqli_query($con, $catQuery);
+    
+} catch (mysqli_sql_exception $e) {
+    die("Error fetching categories: " . $e->getMessage());
+}
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $ownerName = trim($_POST['owner_name']);
@@ -116,28 +126,28 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <div class="container">
         <div class="sidebar">
             <div class="input-group">
-                <a href="index.php" class="button back-button">Back to Menu</a>
+                <a href="index.php" class="button back-button">Back to Home</a>
             </div>
 
             <ul>
-                <li class="active"><a href="user_profile_settings.php">Profile</a></li>
-                <li><a href="user_listings.php">Listings</a></li>
+                <li class="active"><a href="businessProfileSettings.php">Profile</a></li>
+                <li><a href="editAds.php">Listings</a></li>
+                <li><a href="logout.php">Logout</a></li>
              
             </ul>
         </div>
 
         <div class="profile-section">
-            <h1>Business Profile</h1>
+            
 
+            
+
+            <div class="profile-edit">
+            <h1>Business Profile</h1>
             <?php if (!empty($updateMessage)) { ?>
                 <p class="success-message"><?php echo htmlspecialchars($updateMessage); ?></p>
             <?php } ?>
-
-            <div class="profile-edit">
-                <div class="profile-image">
-                    <img src="images/<?php echo htmlspecialchars($user_data['profile_picture']); ?>" alt="Profile Picture">
-                    <a href="edit_picture.php">Edit Profile Picture</a>
-                </div>
+                
 
                 <form method="post">
                     <div class="input-group">
@@ -185,20 +195,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <label for="category"> Edit Category:</label> 
                         <select class="dropdown" id="category" name="category" required>
                         <option value="" disabled>Select a Category</option>
-                        <?php
-
-                        $categories = [
-                            "Handy Man", "Electrical", "Plumbing", "Carpenter", "Landscaping"
-                        ];
-
-                        foreach ($categories as $categoryOption) {
-                            
-                            $selected = ($categoryOption == $business_data['category']) ? 'selected' : '';
-                            echo "<option value='$categoryOption' $selected>$categoryOption</option>";
-                       
-                        }
-
-                        ?>
+                        <?php while ($row = mysqli_fetch_assoc($catResult)): ?>
+                        <option value="<?php echo htmlspecialchars($row['category_id']); ?>">
+                            <?php echo htmlspecialchars($row['category_name']); ?>
+                        </option>
+                        <?php endwhile; ?>
+                        
 
                         </select>
                     </div>
@@ -234,13 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <input type="submit" value="Save Changes" class="button">
                     </div>
 
-                    <?php if ($updateMessage === "Profile updated successfully!") { ?>
-                        <div class="changedMessage">
-                            <h2>Account changes have been made</h2>
-                        </div>
-                    <?php }
                     
-                    ?>
 
                     
                 </form>

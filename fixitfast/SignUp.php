@@ -22,22 +22,28 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     $checkQuery = "SELECT * FROM users WHERE user_name = '$uName' LIMIT 1";
     
 
-    if($password != $cPassword){
-        $matchErr = "Passwords don't match";
-        echo($matchErr);
-    }else{
+    
 
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         if(!empty($uName) && !empty($fName) && !empty($lName) && !empty($password)){
 
+            if($password != $cPassword){
+                $matchErr = "Passwords don't match";
+                //echo($matchErr);
+            }elseif(!preg_match('/[A-Z]/', $password)){
+                $matchErr = "Password must contain at least one uppercase letter.";
+            }elseif(!preg_match('/[\W_]/', $password)){
+                $matchErr = "Password must contain at least one special character.";
+            }else{
+
             $result = mysqli_query($con, $checkQuery);
             if(mysqli_num_rows($result) > 0){
                 $userEx = "Username is taken";
-                echo($userEx);
+                //echo($userEx);
             }else{
-                echo("inside if");
+                //echo("inside if");
                 try{
                     $query = "insert into users (first_name,last_name,user_name,password,county,business, verified, admin,ban,profile_pic) values('$fName','$lName','$uName','$hashedPassword','$county','$business','$verified','$admin','$ban','$profilePic')";
                     mysqli_query($con, $query);
@@ -60,6 +66,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
               
 
             }
+            }
             //save to database
             //$user_id = random_num(20);
             
@@ -67,7 +74,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             $eMessage = "Plesse fill out all fields";
             //echo "Plesse enter a valid name and password";
         }
-    }
+    
 
     
 }
@@ -80,13 +87,13 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/signup.css">
-    <title>SignUp page</title>
+    <title>SignUp</title>
 </head>
 <body>
 
 
 <div class = container>
-    <H1>SignUp page</H1>
+    <H1 class = "title">SignUp</H1>
     
 
     <form action="" method = "post">
@@ -176,7 +183,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         
         
        
-       
+        <div class = "navBtn">
+        <a href="Login.php">Login</a><br>
+
+         <a href="businessSignup.php">become a seller</a>
+    </div>
        
         
         
@@ -198,11 +209,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         
     </form>
 
-    <div class = "navBtn">
-        <a href="login.php">Login</a><br>
-
-         <a href="businessSignup.php">become a seller</a>
-    </div>
+    
     
 
 </div>

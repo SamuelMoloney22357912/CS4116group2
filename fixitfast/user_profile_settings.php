@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 include("connection.php");
@@ -26,6 +27,8 @@ if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == 
     } else {
         $updateMessage = "The file is not an image.";
     }
+}else{
+    //$updateMessage = "Folder does not exsist";
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -78,6 +81,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 if (!empty($user_data['profile_pic']) && file_exists($user_data['profile_pic'])) {
     $profilePicture = $user_data['profile_pic'];
 }
+else{
+    $profilePicture = "images/default_profile_pic.webp";
+}
 ?>
 
 <!DOCTYPE html>
@@ -94,7 +100,7 @@ if (!empty($user_data['profile_pic']) && file_exists($user_data['profile_pic']))
     <div class="container">
         <div class="sidebar">
             <div class="input-group">
-                <a href="index.php" class="button back-button">Back to Menu</a>
+                <a href="index.php" class="button back-button">Back to Home</a>
             </div>
 
             <ul>
@@ -107,7 +113,10 @@ if (!empty($user_data['profile_pic']) && file_exists($user_data['profile_pic']))
         </div>
 
         <div class="profile-section">
+        <div class="profile-edit">
             <h1>User Profile</h1>
+
+            
 
             <?php if (!empty($updateMessage)) { ?>
                 <p class="<?php echo (strpos(strtolower($updateMessage), 'success') !== false) ? 'success-message' : 'error-message'; ?>">
@@ -189,6 +198,7 @@ if (!empty($user_data['profile_pic']) && file_exists($user_data['profile_pic']))
                 </div>
 
             </form>
+            </div>
         </div>
     </div>
 

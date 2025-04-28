@@ -1,5 +1,10 @@
 <?php
 session_start();
+$updateMessage = "";
+if (isset($_SESSION['updateMessage'])) {
+    $updateMessage = $_SESSION['updateMessage'];
+    unset($_SESSION['updateMessage']);
+}
 include("connection.php");
 include("functions.php");
 error_reporting(E_ALL);
@@ -11,7 +16,7 @@ ini_set('display_errors', 1);
 $user_data = check_login($con);
 
 
-$updateMessage = "";
+//$updateMessage = "";
 
 $user_id = $user_data['user_id'];
 try{
@@ -126,8 +131,10 @@ try{
                 $stmt->bind_param("i", $service_id);
 
                 if ($stmt->execute()) {
-                    $updateMessage = "Ad removed successfully!";
-                    $selected_ad = null; // Clear the ad info so the form resets
+                    $_SESSION['updateMessage'] = "Ad removed successfully!";
+                    header("Location: " . $_SERVER['PHP_SELF']);
+                    exit();
+                    $selected_ad = null; 
                 } else {
                     $updateMessage = "Failed to remove ad.";
                 }
@@ -169,12 +176,13 @@ try{
     <div class="container">
         <div class="sidebar">
             <div class="input-group">
-                <a href="index.php" class="button back-button">Back to Menu</a>
+                <a href="index.php" class="button back-button">Back to Home</a>
             </div>
 
             <ul>
-                <li class="businessSet"><a href="user_profile_settings.php">Profile</a></li>
-                <li class = "active"> <a href="editAds.php">Edit Listings</a></li>
+                <li class="businessSet"><a href="businessProfileSettings.php">Profile</a></li>
+                <li class = "active"> <a href="editAds.php">Listings</a></li>
+                <li><a href="logout.php">Logout</a></li>
                
 
             </ul>
@@ -214,6 +222,7 @@ try{
                 <form method = "post" enctype="multipart/form-data">
                     <input type="hidden" name="service_id" value="<?php echo isset($selected_ad) ? htmlspecialchars($selected_ad['service_id']) : ''; ?>">
                     <label class = "image-upload">
+                        <p>Click on Image to edit:</p>
                         <img class = " AdPic" src="<?= !empty($selected_ad['picture']) ? htmlspecialchars($selected_ad['picture']) : './images/ad_placeholder.png' ?>" alt="Upload Image Button" >
                         <input class = "PicBtn" type="file" id="adImage" name="adImage" accept="image/*">
                     </label>
@@ -261,17 +270,17 @@ try{
                     <textarea name="description" id="description" rows="10"><?php echo isset($selected_ad) ? htmlspecialchars($selected_ad['description']) : ''; ?></textarea>
 
                     <label for="price1">Edit price1:</label>
-                    <input type="text" id="price1" name="price1" value="<?php echo isset($selected_ad) ? htmlspecialchars($selected_ad['price1']) : ''; ?>">
+                    <input type="number" placeholder = "Price in (€)" id="price1" name="price1" value="<?php echo isset($selected_ad) ? htmlspecialchars($selected_ad['price1']) : ''; ?>">
                     <label for="des1">Edit Description 1:</label>
                     <textarea name="des1" id="des1" rows="10"><?php echo isset($selected_ad) ? htmlspecialchars($selected_ad['description1']) : ''; ?></textarea>
 
                     <label for="price2">Edit price 2:</label>
-                    <input type="text" id="price2" name="price2" value="<?php echo isset($selected_ad) ? htmlspecialchars($selected_ad['price2']) : ''; ?>">
+                    <input type="number" placeholder = "Price in (€)" id="price2" name="price2" value="<?php echo isset($selected_ad) ? htmlspecialchars($selected_ad['price2']) : ''; ?>">
                     <label for="des2">Edit Description 2:</label>
                     <textarea name="des2" id="des2" rows="10"><?php echo isset($selected_ad) ? htmlspecialchars($selected_ad['description2']) : ''; ?></textarea>
 
                     <label for="price3">Edit price 3:</label>
-                    <input type="text" id="price3" name="price3" value="<?php echo isset($selected_ad) ? htmlspecialchars($selected_ad['price3']) : ''; ?>">
+                    <input type="number" placeholder = "Price in (€)" id="price3" name="price3" value="<?php echo isset($selected_ad) ? htmlspecialchars($selected_ad['price3']) : ''; ?>">
                     <label for="des3">Edit Description 3:</label>
                     <textarea name="des3" id="des3" rows="10"><?php echo isset($selected_ad) ? htmlspecialchars($selected_ad['description3']) : ''; ?></textarea>
                     
@@ -283,7 +292,7 @@ try{
 
             <div class = "buttons">
                 <div class = "submit">
-                    <button class = "submit" type="submit" name = "save_changes">save Changes</button>
+                    <button class = "submit" type="submit" name = "save_changes">Save Changes</button>
                 </div>
         
                 <div class = "Remove">

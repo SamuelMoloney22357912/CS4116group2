@@ -71,14 +71,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
    
     
-    <H1 class = "tiitle">Login page</H1>
+    <H1 class = "title">Login</H1>
 
     <form method = "post">
         <label for="uName">User Name:</label><br>
         <input type="text" id="uName" name="uName" placeholder="Enter"><br>
         <label for="password">Password:</label><br>
         <input type="password" id="password" name="password" placeholder="Enter"><br><br>
-        <input type="submit" value="Login">
+        <input class = "loginBtn" type="submit" value="Login">
     </form>
 
    
@@ -87,20 +87,20 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     <p class = "errorMessage"><?php echo($emptyFields.$incorectInfo.$bannedMessage); ?></p>
     <?php endif; ?>
 
-    <a href="SignUp.php">
-         <button class = "signup_button" type = "button">SignUp</button>
-    </a>
+    <div class = options>
+        <a class = "signUpBtn" href="SignUp.php">
+            SignUp
+        </a>
 
-    <a href="businessSignup.php">
-            <button class = "Bis_signup_button" type = "button">Become a seller</button>
-    </a>
+        <a class = "bSellerBtn" href="businessSignup.php">
+                Become a seller
+        </a>
+    </div>
 
     
 
 </div>
-    <a href="SignUp.php"> Go to SignUp</a>
-
-    <a href="index.html">Go home</a>
+   
     
 </body>
 </html>

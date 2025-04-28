@@ -3,9 +3,26 @@ session_start();
 include("connection.php");
 include("functions.php");
 
+
+$user_data = check_login($con);
+//$service_id = $_GET['service_id'];
+$service_id = isset($_GET['service_id']) ? intval($_GET['service_id']) : 0;
+//echo($service_id);
+
+try{
+    $nameQuery = "SELECT name FROM services WHERE service_id = '$service_id'";
+    $result = mysqli_query($con, $nameQuery);
+    $row = mysqli_fetch_assoc($result);
+    $service_name = $row['name'];
+
+}catch(mysqli_sql_exception $e){
+    die("Database fecth error: " . $e->getMessage());
+}
+
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $userId = 0;
-    $serviceId = 1;
+    $userId = $user_data['user_id'];
+    
+    //$serviceId = 1;
     $businessName = $_POST['business_name']; 
     $rating = isset($_POST['rating']) ? intval($_POST['rating']) : 0; 
     $comment = $_POST['comment'];
@@ -14,22 +31,33 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $businessName = mysqli_real_escape_string($con, $businessName);
     $comment = mysqli_real_escape_string($con, $comment);
 
-    if (!empty($businessName) && !empty($rating) && !empty($comment)) {
-        try {
-            $query = "INSERT INTO reviews (service_id, business_name, user_id, rating, comment) VALUES 
-            ('$serviceId', '$businessName','$userId', '$rating', '$comment')";
+    $verifyQuery = "SELECT * FROM verified_users WHERE user_id = '$userId' AND service_id = '$service_id'";
+    $verifyResult = mysqli_query($con, $verifyQuery);
 
-        if (mysqli_query($con, $query)) {
-            echo "<div id='submissionSuccess' style='display: none;'></div>";
+    if (mysqli_num_rows($verifyResult) > 0){
+
+    
+
+        if (!empty($rating) && !empty($comment)) {
+            try {
+                $query = "INSERT INTO reviews (service_id, user_id, rating, comment) VALUES 
+                ('$service_id','$userId', '$rating', '$comment')";
+
+            if (mysqli_query($con, $query)) {
+                echo "<div id='submissionSuccess' style='display: none;'></div>";
+            } else {
+                echo "<script>alert('Error submitting review: " . mysqli_error($con) . "');</script>";
+            }
+
+            } catch (mysqli_sql_exception $e) {
+                die("Database insert error: " . $e->getMessage());
+            }
         } else {
-            echo "<script>alert('Error submitting review: " . mysqli_error($con) . "');</script>";
+            echo "<script>alert('Please fill out all fields.');</script>";
         }
 
-        } catch (mysqli_sql_exception $e) {
-            die("Database insert error: " . $e->getMessage());
-        }
-    } else {
-        echo "<script>alert('Please fill out all fields.');</script>";
+    }else{
+        echo "<script>alert('You are not verified to review this service. You must have used the service to leave a review.');</script>";
     }
 }
 ?>
@@ -56,7 +84,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 <body>
 <div class="heading">
     <div class="backContainer">
-        <button onclick="window.history.back();" class="backButton">Back</button>
+        <a href="view_ad.php?id=<?php echo $service_id; ?>">
+        <button class="backButton">Back</button>
+        </a>
     </div>
     <div class="headingCenter">
         <h1 class="reviewHeading">Review</h1>
@@ -64,24 +94,19 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 </div>
    
 
-    <hr>
+    
     <br>
 <form method="post">
     <div class="selectBusiness">
     <div class="text">
-        <h2>Select Business:</h2>
+        <h2>Review for <?php echo($service_name);?>:</h2>
     </div>
-    <div>
-    <select class="dropdown" name="business_name">
-    <option value="" disabled selected>Choose an option</option>
-    <option value="business1">Business 1</option>
-    <option value="business2">Business 2</option>
-    <option value="business3">Business 3</option>
-</select>
+    
+    
 
 <input type="hidden" name="rating" id="ratingInput">
 
-    </div>
+    
 </div>
 
 <br>
@@ -140,18 +165,8 @@ stars.forEach((star, index) => {
             stars[i].classList.add('selected');
         }
 
+        
         document.getElementById('ratingInput').value = star.getAttribute('data-value');
-    });
-
-    star.addEventListener('mouseover', function() {
-        stars.forEach(s => s.classList.remove('hover'));
-        for (let i = 0; i <= index; i++) {
-            stars[i].classList.add('hover');
-        }
-    });
-
-    star.addEventListener('mouseout', function() {
-        stars.forEach(s => s.classList.remove('hover'));
     });
 });
 
@@ -176,4 +191,5 @@ stars.forEach((star, index) => {
 
 </body>
 </html>
+
 

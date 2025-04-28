@@ -8,7 +8,16 @@
 
     $user_data = check_login($con);
     $hideButton = ($user_data && $user_data['business'] == 1);
-    $settings_link = ($user_data && $user_data['business'] == 1) ? "busSettingsTest .php" : "user_profile_settings.php";
+    $settings_link = ($user_data && $user_data['business'] == 1) ? "businessProfileSettings.php" : "user_profile_settings.php";
+
+    $categoryOptions = "";
+    try {
+        $catQuery = "SELECT category_id, category_name FROM service_categories";
+        $catResult = mysqli_query($con, $catQuery);
+        
+    } catch (mysqli_sql_exception $e) {
+        die("Error fetching categories: " . $e->getMessage());
+    }
 
 
     $query = "SELECT service_id, picture, name FROM services";
@@ -41,9 +50,15 @@
     $county = isset($_GET['county']) ? trim($_GET['county']) : "";
     $category = isset($_GET['category']) ? trim($_GET['category']) : "";
     $price = isset($_GET['price']) ? trim($_GET['price']) : "";
+    $rating = isset($_GET['rating']) ? trim($_GET['rating']) : "";
 
     // Start SQL query
-    $sql = "SELECT * FROM services WHERE 1=1"; 
+    //$sql = "SELECT * FROM services WHERE 1=1"; 
+    $sql = "
+    SELECT s.*, ROUND(AVG(r.rating)) as avg_rating
+    FROM services s
+    LEFT JOIN reviews r ON s.service_id = r.service_id
+    WHERE 1=1";
     $params = [];
     $types = "";
 
@@ -65,7 +80,7 @@
 
     // Apply category filter
     if (!empty($category)) {
-        $sql .= " AND category = ?";
+        $sql .= " AND category_id = ?";
         $params[] = $category;
         $types .= "s";
     }
@@ -93,6 +108,15 @@
                 break;
         }
     }
+
+    $sql .= " GROUP BY s.service_id";
+
+    if (!empty($rating)) {
+        $sql .= " AND ROUND(rating) = ?";
+        $params[] = $rating;
+        $types .= "i";
+    }
+    
 
     // Prepare and execute the statement
     $stmt = $con->prepare($sql);
@@ -158,14 +182,14 @@
             <a href="businessPlaceAd.php">Place Ad</a>
         </button>
     <?php endif; ?>
-        <a class = "messageBtn" href="message.php">
+        <a class = "messageBtn" href="messages.php">
             <img src="./images/mail_logo_navbar.png" alt="">
         </a>
 
         <a class = "inquireBtn" href="inquire.php">
-            <img src="./images/inquires_logo_navbar.png" alt="">
+            <img src="./images/Inquires_logo_navbar.png" alt="">
         </a>
-        <a class = "settingsBtn" href= "<?php echo $settings_link; ?>">
+        <a class = "settingsBtn" href= "<?php echo ($settings_link); ?>">
             <img src="./images/settings_logo_navbar.png" alt="Settings">
         </a>
 
@@ -220,13 +244,13 @@
             <option value="Wicklow" <?= ($county == "Wicklow") ? 'selected' : '' ?>>Wicklow</option>
         </select>
 
-        <select name="Rating" id="">
+        <select name="rating" id="">
         <option value="" >Rating</option>
-            <option value="Antrim">1 star</option>
-            <option value="Armagh">2 star</option>
-            <option value="Carlow">3 star</option>
-            <option value="Cavan">4 star</option>
-            <option value="Clare">5 star</option>
+        <option value="1" <?= ($rating == "1") ? 'selected' : '' ?>>1 star</option>
+        <option value="2" <?= ($rating == "2") ? 'selected' : '' ?>>2 star</option>
+        <option value="3" <?= ($rating == "3") ? 'selected' : '' ?>>3 star</option>
+        <option value="4" <?= ($rating == "4") ? 'selected' : '' ?>>4 star</option>
+        <option value="5" <?= ($rating == "5") ? 'selected' : '' ?>>5 star</option>
 
         </select>
 
@@ -241,13 +265,12 @@
         </select>
 
         <select name="category" id="">
-        <option value="" >category</option>
-            <option value="gardening">Gardening</option>
-            <option value="electrical">Electrical</option>
-            <option value="plumbing">Plumbing</option>
-            <option value="carpentar">Carpentar</option>
-            <option value="handyman">Handyman</option>
-            <option value="roofer">Roofer</option>
+        <option value="" >Category</option>
+        <?php while ($row = mysqli_fetch_assoc($catResult)): ?>
+                    <option value="<?php echo htmlspecialchars($row['category_id']); ?>" <?php if ($row['category_id'] == $category) echo 'selected'; ?>>
+                        <?php echo htmlspecialchars($row['category_name']); ?>
+                    </option>
+        <?php endwhile; ?>
 
         </select>
 
@@ -263,8 +286,8 @@
     <div class="Heading"></div>
     <div class="ads-container">
         <?php if (empty($services)): ?>
-            <div class="noResDiv">
-                <p class="noResult">No ads found</p>
+            <div class = "noResDiv">
+                <p class = "noResult">No ads found</p>
             </div>
         <?php else: ?>
             <?php foreach ($services as $ad): 
@@ -273,7 +296,7 @@
                 }
             ?>
                 <div class="ad-card">
-                    <a href="service_details.php?id=<?= isset($ad['service_id']) ? htmlspecialchars($ad['service_id']) : '' ?>">
+                    <a href="view_ad.php?id=<?= isset($ad['service_id']) ? htmlspecialchars($ad['service_id']) : '' ?>">
                         <img src="<?= !empty($ad['picture']) ? htmlspecialchars($ad['picture']) : './images/ad_placeholder.png' ?>" 
                             alt="<?= !empty($ad['name']) ? htmlspecialchars($ad['name']) : 'No Name' ?>">
                     </a>
@@ -284,30 +307,30 @@
     </div>
 </div>
 
+
 <footer>
-    <div class="footer-content">
-        <div class="socials">
-            <a href="https://twitter.com" target="_blank"><img src="images/twitter-x-logo-F7DCE5534C-seeklogo.com.png" alt="X"></a>
-            <a href="https://instagram.com" target="_blank"><img src="images/Insta_Logo copy.webp" alt="Instagram"></a>
-            <a href="https://youtube.com" target="_blank"><img src="images/YouTube_play_button_square_(2013-2017).svg.png" alt="YouTube"></a>
-        </div>
-
-        <div class="contact-info">
-            <h3>Contact Us</h3>
-            <p><strong>General Enquiries:</strong> info@fixitfast.com</p>
-            <p><strong>Service Enquiries:</strong> services@fixitfast.com</p>
-            <p><strong>Office Location:</strong> 123 Main Street, Limerick</p>
-            <p><strong>Office Number:</strong> +353 1 234 5678</p>
-        </div>
-    </div>
-
-    <div class="footer-bottom">
-        <p>&copy; 2025 FixItFast. All rights reserved.</p>
-    </div>
-</footer>
-
-</div> 
-
+     <div class="footer-content">
+         <div class="socials">
+             <a href="https://twitter.com" target="_blank"><img src="images/twitter-x-logo-F7DCE5534C-seeklogo.com.png" alt="X"></a>
+             <a href="https://instagram.com" target="_blank"><img src="images/Insta_Logo.webp" alt="Instagram"></a>
+             <a href="https://youtube.com" target="_blank"><img src="images/YouTube_play_button_square_(2013-2017).svg.png" alt="YouTube"></a>
+         </div>
+ 
+         <div class="contact-info">
+             <h3>Contact Us</h3>
+             <p><strong>General Enquiries:</strong> info@fixitfast.com</p>
+             <p><strong>Service Enquiries:</strong> services@fixitfast.com</p>
+             <p><strong>Office Location:</strong> 123 Main Street, Limerick</p>
+             <p><strong>Office Number:</strong> +353 1 234 5678</p>
+         </div>
+     </div>
+ 
+     <div class="footer-bottom">
+         <p>&copy; 2025 FixItFast. All rights reserved.</p>
+     </div>
+ </footer>
+ 
+ </div> 
    
     
 </body>

@@ -5,8 +5,24 @@
 
     $user_data = check_login($con);
     $hideButton = ($user_data && $user_data['business'] == 1);
-    $settings_link = ($user_data && $user_data['business'] == 1) ? "editAds.php" : "user_profile_settings.php";
+    $settings_link = ($user_data && $user_data['business'] == 1) ? "businessProfileSettings.php" : "user_profile_settings.php";
 
+    try{
+        $topRatedQuery = "
+        SELECT s.*, AVG(r.rating) as avg_rating 
+        FROM services s
+        LEFT JOIN reviews r ON s.service_id = r.service_id
+        GROUP BY s.service_id
+        ORDER BY avg_rating DESC
+        LIMIT 3";
+        $topRatedResult = mysqli_query($con, $topRatedQuery);
+        $topRatedAds = mysqli_fetch_all($topRatedResult, MYSQLI_ASSOC);
+
+
+    }catch(mysqli_sql_exception $e){
+        die("Database fetch error: " . $e->getMessage());
+    }
+    
     
 
 ?>
@@ -54,12 +70,12 @@
             <a href="businessPlaceAd.php">Place Ad</a>
         </button>
     <?php endif; ?>
-        <a class = "messageBtn" href="message.php">
+        <a class = "messageBtn" href="messages.php">
             <img src="./images/mail_logo_navbar.png" alt="">
         </a>
 
         <a class = "inquireBtn" href="inquire.php">
-            <img src="./images/inquires_logo_navbar.png" alt="">
+            <img src="./images/Inquires_logo_navbar.png" alt="">
         </a>
         <a class = "settingsBtn" href= "<?php echo $settings_link; ?>">
             <img src="./images/settings_logo_navbar.png" alt="Settings">
@@ -70,26 +86,44 @@
 
     <div class = "feturedAds">
         <div class = "Heading">
-            <H1 class = AdHeading>Fetured Business</H1>
+            <H1 class = AdHeading>Featured Business</H1>
 
         </div>
         <div class = "ads">
-            <div class = "ad1">
-                <a href="message.php">
-                    <img class = "imAd1"src="./images/Picture 1.png" alt="">
-                </a>
-            </div>
-            <div class = "ad2">
-                <a  href="message.php">
-                    <img class = "imAd2"src="./images/ad_placeholder.png" alt="">
-                </a>
+            <div class="ad1">
+                <?php if (!empty($topRatedAds[0])): ?>
+                    <div class="ad-card">
+                        <a href="view_ad.php?id=<?= htmlspecialchars($topRatedAds[0]['service_id']) ?>">
+                        <img src="<?= !empty($topRatedAds[0]['picture']) ? htmlspecialchars($topRatedAds[0]['picture']) : './images/ad_placeholder.png' ?>" 
+                            alt="<?= htmlspecialchars($topRatedAds[0]['name']) ?>">
 
+                        </a>
+                        <h2><?= htmlspecialchars($topRatedAds[0]['name']) ?></h2>
+                    </div>
+                <?php endif; ?>
             </div>
-            <div class = "ad3">
-                <a  href="message.php">
-                    <img class = "imAd3"src="./images/ad_placeholder.png" alt="">
-                </a>
+            <div class="ad2">
+                <?php if (!empty($topRatedAds[1])): ?>
+                    <div class="ad-card">
+                        <a href="view_ad.php?id=<?= htmlspecialchars($topRatedAds[1]['service_id']) ?>">
+                        <img src="<?= !empty($topRatedAds[1]['picture']) ? htmlspecialchars($topRatedAds[1]['picture']) : './images/ad_placeholder.png' ?>" 
+                            alt="<?= htmlspecialchars($topRatedAds[1]['name']) ?>">
 
+                        </a>
+                        <h2><?= htmlspecialchars($topRatedAds[1]['name']) ?></h2>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <div class="ad3">
+                <?php if (!empty($topRatedAds[2])): ?>
+                    <div class="ad-card">
+                        <a href="view_ad.php?id=<?= htmlspecialchars($topRatedAds[2]['service_id']) ?>">
+                        <img src="<?= !empty($topRatedAds[2]['picture']) ? htmlspecialchars($topRatedAds[2]['picture']) : './images/ad_placeholder.png' ?>" 
+                            alt="<?= htmlspecialchars($topRatedAds[2]['name']) ?>">
+                        </a>
+                        <h2><?= htmlspecialchars($topRatedAds[2]['name']) ?></h2>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
         <div class = "moreBtn">
@@ -97,6 +131,11 @@
                 <a href="explore.php">See More</a>
             </button>
         </div>
+    </div>
+
+    <div class = slogan>
+        
+
     </div>
 
 
@@ -107,7 +146,31 @@
     
 
         
-        <a href="logout.php">Logout</a>
+        
+
+        <footer>
+     <div class="footer-content">
+         <div class="socials">
+             <a href="https://twitter.com" target="_blank"><img src="images/twitter-x-logo-F7DCE5534C-seeklogo.com.png" alt="X"></a>
+             <a href="https://instagram.com" target="_blank"><img src="images/Insta_Logo.webp" alt="Instagram"></a>
+             <a href="https://youtube.com" target="_blank"><img src="images/YouTube_play_button_square_(2013-2017).svg.png" alt="YouTube"></a>
+         </div>
+ 
+         <div class="contact-info">
+             <h3>Contact Us</h3>
+             <p><strong>General Enquiries:</strong> info@fixitfast.com</p>
+             <p><strong>Service Enquiries:</strong> services@fixitfast.com</p>
+             <p><strong>Office Location:</strong> 123 Main Street, Limerick</p>
+             <p><strong>Office Number:</strong> +353 1 234 5678</p>
+         </div>
+     </div>
+ 
+     <div class="footer-bottom">
+         <p>&copy; 2025 FixItFast. All rights reserved.</p>
+     </div>
+ </footer>
+ 
+ </div> 
 
 
     

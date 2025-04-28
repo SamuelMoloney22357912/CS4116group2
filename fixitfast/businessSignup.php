@@ -3,7 +3,7 @@ session_start();
 include("connection.php");
 include("functions.php");
 //echo("HI");
-$text = "Hi";
+//$text = "Hi";
 
 $categoryOptions = "";
 try {
@@ -38,14 +38,20 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     $checkUserMatch = "SELECT * FROM users WHERE user_name = '$busUName' LIMIT 1";
 
 
-    if($password != $cPassword){
-        $matchErr = "The passwords do not match";
-        echo($matchErr);
-    }else{
+    
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         if(!empty($bName) && !empty($oName) && !empty($phoneN) && !empty($dess) && !empty($busUName) && !empty($password)){
+            if($password != $cPassword){
+                $matchErr = "The passwords do not match";
+                //echo($matchErr);
+            }elseif(!preg_match('/[A-Z]/', $password)){
+                $matchErr = "Password must contain at least one uppercase letter.";
+            }elseif(!preg_match('/[\W_]/', $password)){
+                $matchErr = "Password must contain at least one special character.";
+            }else{
+            
             $result2 = mysqli_query($con, $checkUserMatch);
             if(mysqli_num_rows($result2) > 0){
                 $userEx = "Username is taken";
@@ -78,13 +84,13 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             $result = mysqli_query($con, $checkUserMatchQuery);
             if(mysqli_num_rows($result) > 0){
                 $userEx = "Username is taken";
-                echo($userEx);
+                //echo($userEx);
             }else{
-                echo("inside if");
+                //echo("inside if");
                 try{
                     $query = "insert into businesses (owner_id,owner_name,business_name,county,category,description,phone_no,user_name,password) values('$ownerId','$oName','$bName','$county','$category','$dess','$phoneN','$busUName','$hashedPassword')";
                     mysqli_query($con, $query);
-                    echo("Sucseful");
+                    //echo("Sucseful");
                     $thkFSnUp = "Thank you for signing up ";
                 }catch(mysqli_sql_exception $e){
                     die("Database insert error: " . $e->getMessage());
@@ -95,14 +101,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             //header("Location: Login.php");
             //die();
             }
+        }
             
             
         }else{
             $eMessage = "Plesse fill out all fields";
-            echo($eMessage);
+            //echo($eMessage);
         }
     
-    }
+    
     
     
 
@@ -122,7 +129,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 <body>
 
 <div class = container>
-    <H1>Business SignUp</H1>
+    <H1 class = "title" >Business SignUp</H1>
 
 
     <form action="" method = "post">
@@ -198,7 +205,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             </td>
             <td rowspan = "2">
                 <label for="dess">Description:</label><br>
-                <input class = dess type="text" id="dess" name="dess" value="<?php echo htmlspecialchars($_POST['dess'] ?? ''); ?>">
+                <textarea class = "dess" name="dess" id="dess" ><?php echo htmlspecialchars($_POST['dess'] ?? ''); ?></textarea>
+                
             </td>
         </tr>
 
@@ -231,12 +239,18 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
             </td>
             <td>
-                <input type="submit" value="SignUp">
+    
+                <input class = "signUpBtn" type="submit" value="SignUp">
             </td>
         </tr>
         
     </table>
     </form>
+
+    <a  class = "backBtn" href="Login.php">
+       Go back
+    </a>
+
     <?php if (!empty($thkFSnUp)): ?>
         <p class="thkYou"><?php echo $thkFSnUp; ?></p>
             <script>
@@ -249,9 +263,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     <?php if (!empty($matchErr)|| !empty($userEx) || !empty($eMessage)): ?>
     <p class = "error"><?php echo($userEx.$matchErr.$eMessage); ?></p>
     <?php endif; ?>
-    <a  class = "backBtn" href="Login.php">
-       Go back
-    </a>
+    
 
 </div>
 
