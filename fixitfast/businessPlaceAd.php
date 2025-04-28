@@ -193,7 +193,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     <div class="firstFields">
         <div>
             <label for="title"> Title</label>
-            <input type="text" id="title" name="title" placeholder="Enter the name of your business...">
+            <input type="text" id="title" name="title" placeholder="Enter the name of your service...">
         </div>
         <div>
             <label for="county">County</label>

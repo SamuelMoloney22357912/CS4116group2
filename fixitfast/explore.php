@@ -112,7 +112,7 @@
     $sql .= " GROUP BY s.service_id";
 
     if (!empty($rating)) {
-        $sql .= " AND ROUND(rating) = ?";
+        $sql .= " HAVING avg_rating = ?";
         $params[] = $rating;
         $types .= "i";
     }

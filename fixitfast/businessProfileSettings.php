@@ -192,16 +192,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 
                     <div>
-                        <label for="category"> Edit Category:</label> 
+                        <label for="category">Edit Category:</label> 
                         <select class="dropdown" id="category" name="category" required>
-                        <option value="" disabled>Select a Category</option>
-                        <?php while ($row = mysqli_fetch_assoc($catResult)): ?>
-                        <option value="<?php echo htmlspecialchars($row['category_id']); ?>">
-                            <?php echo htmlspecialchars($row['category_name']); ?>
-                        </option>
-                        <?php endwhile; ?>
-                        
-
+                            <option value="" disabled>Select a Category</option>
+                            <?php while ($row = mysqli_fetch_assoc($catResult)): ?>
+                                <?php
+                                    $selected = ($row['category_id'] == $business_data['category']) ? 'selected' : '';
+                                ?>
+                                <option value="<?php echo htmlspecialchars($row['category_id']); ?>" <?php echo $selected; ?>>
+                                    <?php echo htmlspecialchars($row['category_name']); ?>
+                                </option>
+                            <?php endwhile; ?>
                         </select>
                     </div>
 
